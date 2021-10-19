@@ -9,22 +9,35 @@ import game_framework
 import title_state
 
 
-
 name = "MainState"
 
 player = None
+enemys = None
+items = None
 grass = None
 font = None
 
+
 def enter():
-    global player, grass
+    global player, enemys, items, grass
     player = Mario()
+    enemys = []
+    items = []
+
+    enemys.append(Enemy(x=50))
+    enemys.append(Enemy(x=600, type=1))
+    for i in range(4):
+        items.append(Item(x=100 + 100*i, y=400, type=i))
     grass = Grass()
 
 
 def exit():
-    global player, grass
+    global player, enemys, items, grass
     del(player)
+    for enemy in enemys:
+        del(enemy)
+    for item in items:
+        del(item)
     del(grass)
 
 
@@ -48,6 +61,8 @@ def handle_events():
                 player.change_status()
             elif event.key == SDLK_2:
                 player.change_status(False)
+                for enemy in enemys:
+                    enemy.is_alive = False
             elif event.key == SDLK_z:
                 if player.attack_cool_time == 0:
                     player.attack()
@@ -75,17 +90,22 @@ def handle_events():
 
 def update():
     player.update()
+    for enemy in enemys:
+        enemy.update()
+    for item in items:
+        item.update()
     if not player.is_alive:
         if player.y < 0:
             game_framework.change_state(title_state)
+
 
 def draw():
     clear_canvas()
     grass.draw()
     player.draw()
+    for enemy in enemys:
+        enemy.draw()
+    for item in items:
+        item.draw(player.current_status)
     update_canvas()
     delay(0.03)
-
-
-
-
