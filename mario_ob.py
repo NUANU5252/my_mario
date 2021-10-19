@@ -72,13 +72,13 @@ class Mario():
                 elif self.current_status < 3:
                     self.later_status = self.current_status - 1
 
-    def attack(self):
+    def attack(self): #
         if not self.is_jumping and not self.is_sit_down and self.current_status == 2:
             self.is_attacking = True
             self.attack_count = 5
             self.attack_cool_time = self.attack_count + 2
 
-    def get_star(self, time=star_time):
+    def get_star(self, time=star_time): #
         self.star_count = time
 
     def die(self):
@@ -206,10 +206,10 @@ class Mario():
 class Enemy():
     def __init__(self, x = random.randint(100, 700), y = 90, type = 0):
         if type == 0:
-            self.image = load_image('run_animation.png')
+            self.image = load_image('run_animation.png') #
             self.frame = random.randint(0, 1)
         if type == 1:
-            self.image = load_image('run_animation.png')
+            self.image = load_image('run_animation.png') #
             self.frame = random.randint(0, 1)
         self.type = type
         self.x = x
@@ -223,7 +223,7 @@ class Enemy():
         self.frame = random.randint(0, 1)
 
     def update(self):
-        self.x += 5
+        self.x += 5 #
         if self.type == 1:
             self.frame = (self.frame + 1) % 2
 
