@@ -27,7 +27,7 @@ def enter():
     enemys.append(Enemy(x=50))
     enemys.append(Enemy(x=600, type=1))
     for i in range(4):
-        items.append(Item(x=100 + 100*i, y=400, type=i))
+        items.append(Item(x=100 + 100*i, y=250, type=i))
     grass = Grass()
 
 
