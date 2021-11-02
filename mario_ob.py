@@ -11,11 +11,22 @@ class Grass:
         self.image.draw(400, 30)
 
 class Mario:
+    image_1 = None
+    image_2 = None
+    image_3 = None
+
     def __init__(self, x = random.randint(100, 700), y = 90):
+        if Mario.image_1 == None:
+            Mario.image_1 = load_image('mario_sheet_1.png')
+        if Mario.image_2 == None:
+            Mario.image_2 = load_image('mario_sheet_2.png')
+        if Mario.image_3 == None:
+            Mario.image_3 = load_image('mario_sheet_3.png')
+
         self.image = []
-        self.image.append(load_image('mario_sheet_1.png'))  # 405 * 118, 16 * 6
-        self.image.append(load_image('mario_sheet_2.png'))  # 405 * 118, 16 * 6
-        self.image.append(load_image('mario_sheet_3.png'))  # 405 * 118, 16 * 6
+        self.image.append(Mario.image_1)  # 405 * 118, 16 * 6
+        self.image.append(Mario.image_2)  # 405 * 118, 16 * 6
+        self.image.append(Mario.image_3)  # 405 * 118, 16 * 6
         # 현재 위치
         self.x = x
         self.y = y
@@ -214,12 +225,20 @@ class Mario:
 # 0 굼바
 # 1 엉금엉금
 class Enemy:
+    image_1 = None
+    image_2 = None
+
     def __init__(self, x=random.randint(50, 750), y=90, type=0):
         self.type = type
+        if Enemy.image_1 == None:
+            Enemy.image_1 = load_image('enemies_sheet_1.png')
+        if Enemy.image_2 == None:
+            Enemy.image_2 = load_image('enemies_sheet_2.png')
+
         if type == 0:
-            self.image = load_image('enemies_sheet_1.png') #
-        if type == 1:
-            self.image = load_image('enemies_sheet_2.png') #
+            self.image = Enemy.image_1 #
+        elif type == 1:
+            self.image = Enemy.image_2 #
         self.x = x
         self.y = y
         # 현재 속도
@@ -259,16 +278,31 @@ class Enemy:
 
 
 class Item:
+    image_box = None
+    image_coin = None
+    image_power = None
+    image_star = None
+
+
     def __init__(self, x=random.randint(50, 750), y=random.randint(140, 550), type=0):
         self.type = type
+        if Item.image_box == None:
+            Item.image_box = load_image('items_sheet_box.png')
+        if Item.image_coin == None:
+            Item.image_coin = load_image('items_sheet_coin.png')
+        if Item.image_power == None:
+            Item.image_power = load_image('items_sheet_power.png')
+        if Item.image_star == None:
+            Item.image_star = load_image('items_sheet_star.png')
+
         if type == 0:
-            self.image = load_image('items_sheet_box.png')  #
+            self.image = Item.image_box
         if type == 1:
-            self.image = load_image('items_sheet_coin.png')  #
+            self.image = Item.image_coin
         if type == 2:
-            self.image = load_image('items_sheet_power.png')  #
+            self.image = Item.image_power
         if type == 3:
-            self.image = load_image('items_sheet_star.png')  #
+            self.image = Item.image_star
         self.x = x
         self.y = y
         self.frame_delay = 0
