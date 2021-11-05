@@ -201,6 +201,37 @@ class Mario:
 
             self.frame += 1
 
+    def return_size(self):
+        if self.current_status == 0:
+            return 48, 48
+        else:
+            return 48, 96
+
+    def collision_with_item(self, item):
+        # return 값이 ture 이면 del item
+        if item.is_alive:
+            if item.type == 0:
+                pass
+                # Item_box 방향에 따라 다르다
+            elif item.type == 1:
+                pass
+                # Item_coin
+            elif item.type == 2:
+                self.change_status()
+                item.is_alive = False
+                return True
+                # Item_power
+            elif item.type == 3:
+                pass
+                # Item_star
+
+    def collision_with_enemy(self, enemy):
+        # return 값이 ture 이면 del item
+        if enemy.is_alive:
+            if True: # 방향에 따라서
+                if True: # 무적이 아니면
+                    self.change_status(False)
+
     def draw(self):
         if not self.is_alive: # 사망
             self.image[0].clip_draw(16 * 6, self.dir * 32, 16, 32, self.x, self.y, 48, 96) # 3배수 출력
@@ -241,6 +272,12 @@ class Enemy:
             self.image = Enemy.image_2 #
         self.x = x
         self.y = y
+        # 사이즈
+        self.x_size = 48
+        if type == 0:
+            self.y_size = 48
+        elif type == 1:
+            self.y_size = 72
         # 현재 속도
         self.x_speed = 5
         self.y_speed = 0
@@ -283,7 +320,6 @@ class Item:
     image_power = None
     image_star = None
 
-
     def __init__(self, x=random.randint(50, 750), y=random.randint(140, 550), type=0):
         self.type = type
         if Item.image_box == None:
@@ -295,6 +331,7 @@ class Item:
         if Item.image_star == None:
             Item.image_star = load_image('items_sheet_star.png')
 
+        # 이미지
         if type == 0:
             self.image = Item.image_box
         if type == 1:
@@ -303,10 +340,19 @@ class Item:
             self.image = Item.image_power
         if type == 3:
             self.image = Item.image_star
+
+        # 사이즈
+        if type == 1:
+            self.x_size = 24
+        else:
+            self.x_size = 48
+        self.y_size = 48
+
         self.x = x
         self.y = y
         self.frame_delay = 0
         self.frame = 0
+        self.is_alive = True
 
     def update(self):
         if self.frame_delay % 2 == 0:
@@ -319,13 +365,32 @@ class Item:
         self.frame_delay += 1
 
     def draw(self, player_status=0):
-        if self.type == 1:
-            self.image.clip_draw(8 * self.frame, 0, 8, 16, self.x, self.y, 24, 48) # 3배수 출력
-        elif self.type == 2:
-            if player_status == 0:
-                y_frame = 1
+        if self.is_alive:
+            if self.type == 1:
+                self.image.clip_draw(8 * self.frame, 0, 8, 16, self.x, self.y, 24, 48) # 3배수 출력
+            elif self.type == 2:
+                if player_status == 0:
+                    y_frame = 1
+                else:
+                    y_frame = 0
+                self.image.clip_draw(16 * self.frame, y_frame*16, 16, 16, self.x, self.y, 48, 48)
             else:
-                y_frame = 0
-            self.image.clip_draw(16 * self.frame, y_frame*16, 16, 16, self.x, self.y, 48, 48)
-        else:
-            self.image.clip_draw(self.frame*16, 0, 16, 16, self.x, self.y, 48, 48)
+                self.image.clip_draw(self.frame*16, 0, 16, 16, self.x, self.y, 48, 48)
+
+    def __del__(self):
+        pass
+
+
+class UI:
+    number_of_coin = 0
+    number_of_life = 0
+
+    def __init__(self):
+        pass
+
+    def reset_data():
+        UI.number_of_coin = 0
+        UI.number_of_life = 3
+
+    def draw():
+        pass

@@ -4,6 +4,7 @@ import os
 
 from pico2d import *
 from mario_ob import *
+from crash_check import *
 
 import game_framework
 import title_state
@@ -61,8 +62,8 @@ def handle_events():
                 player.change_status()
             elif event.key == SDLK_2:
                 player.change_status(False)
-                for enemy in enemys:
-                    enemy.is_alive = False
+                # for enemy in enemys:
+                #     enemy.is_alive = False
             elif event.key == SDLK_z:
                 if player.attack_cool_time == 0:
                     player.attack()
@@ -98,6 +99,32 @@ def update():
         if player.y < 0:
             game_framework.change_state(title_state)
 
+    # 충돌체크
+    player_x_size, player_y_size = player.return_size()
+    x3 = player.x - player_x_size / 2
+    x4 = player.x + player_x_size / 2
+    y3 = player.y - player_y_size / 2
+    y4 = player.y + player_y_size / 2
+
+    for item in items:
+        x1 = item.x - item.x_size/2
+        x2 = item.x + item.x_size/2
+        y1 = item.y - item.y_size / 2
+        y2 = item.y + item.y_size / 2
+
+        if collision_check_2(x1, y1, x2, y2, x3, y3, x4, y4):
+            if player.collision_with_item(item):
+                item.__del__()
+
+    for enemy in enemys:
+        x1 = enemy.x - enemy.x_size / 2
+        x2 = enemy.x + enemy.x_size / 2
+        y1 = enemy.y - enemy.y_size / 2
+        y2 = enemy.y + enemy.y_size / 2
+
+        if collision_check_2(x1, y1, x2, y2, x3, y3, x4, y4):
+            if player.collision_with_enemy(enemy):
+                enemy.__del__()
 
 def draw():
     clear_canvas()
@@ -107,5 +134,19 @@ def draw():
     for item in items:
         item.draw(player.current_status)
     player.draw()
+
+    player_x_size, player_y_size = player.return_size()
+    x3 = player.x - player_x_size / 2
+    x4 = player.x + player_x_size / 2
+    y3 = player.y - player_y_size / 2
+    y4 = player.y + player_y_size / 2
+
+    item = items[2]
+    x1 = item.x - item.x_size / 2
+    x2 = item.x + item.x_size / 2
+    y1 = item.y - item.y_size / 2
+    y2 = item.y + item.y_size / 2
+    debug_print('Is collision :' + str(collision_check_2(x1, y1, x2, y2, x3, y3, x4, y4)) + ', Type :' + str(item.type))
+
     update_canvas()
     delay(0.03)
