@@ -102,10 +102,10 @@ def update():
 def draw():
     clear_canvas()
     grass.draw()
-    player.draw()
     for enemy in enemys:
         enemy.draw()
     for item in items:
         item.draw(player.current_status)
+    player.draw()
     update_canvas()
     delay(0.03)
