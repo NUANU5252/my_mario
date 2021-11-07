@@ -9,7 +9,9 @@ image = None
 
 def enter():
     global image
-    image = load_image('title.png')
+    # image = load_image('start_state_image.jpeg')
+    image = load_image('Super_Mario_Bros._Logo.svg.png')
+
 
 
 def exit():
@@ -27,13 +29,11 @@ def handle_events():
                 game_framework.quit()
             elif(event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
                 game_framework.change_state(main_state)
-            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_s):
-                game_framework.change_state(main_state)
 
 
 def draw():
     clear_canvas()
-    image.draw(400, 300)
+    image.clip_draw(0, 0,  1200, 477, 400, 441, 800, 318)
     update_canvas()
 
 
