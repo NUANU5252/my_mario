@@ -24,7 +24,11 @@ def enter():
     player = Mario()
     enemys = []
     items = []
-
+    # 맵 디자인 할 방법
+    # 여러 스테이지를 효율적으로 로들 할 수 있어야 한다.
+    # 효율적으로 관리 할 수 있어야 한다. 효율적인게 뭔데?
+    # 후보 1 map.py에서 위치의 배열을 가져와 생성
+    # x, y, type의 튜플 배열을 만든다.
     enemys.append(Enemy(x=50))
     enemys.append(Enemy(x=600, type=1))
     for i in range(4):
