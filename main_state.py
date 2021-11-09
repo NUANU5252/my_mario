@@ -8,6 +8,7 @@ from crash_check import *
 
 import game_framework
 import title_state
+import map
 
 
 name = "MainState"
@@ -24,26 +25,26 @@ def enter():
     player = Mario()
     enemys = []
     items = []
-    # 맵 디자인 할 방법
-    # 여러 스테이지를 효율적으로 로들 할 수 있어야 한다.
-    # 효율적으로 관리 할 수 있어야 한다. 효율적인게 뭔데?
-    # 후보 1 map.py에서 위치의 배열을 가져와 생성
-    # x, y, type의 튜플 배열을 만든다.
     enemys.append(Enemy(x=50))
     enemys.append(Enemy(x=600, type=1))
     for i in range(4):
         items.append(Item(x=100 + 100*i, y=250, type=i))
     grass = Grass()
+    map.add_object(grass, 0) # 이것도 레이어 1로 옮긴다.
+    map.add_objects(enemys, 1)
+    map.add_objects(items, 1)
+#     플레이어 포함 보류
 
 
 def exit():
-    global player, enemys, items, grass
+    global player #, enemys, items, grass
     del(player)
-    for enemy in enemys:
-        del(enemy)
-    for item in items:
-        del(item)
-    del(grass)
+    # for enemy in enemys:
+    #     del(enemy)
+    # for item in items:
+    #     del(item)
+    # del(grass)
+    map.clear()
 
 
 def pause():
@@ -95,10 +96,16 @@ def handle_events():
 
 def update():
     player.update()
-    for enemy in enemys:
-        enemy.update()
-    for item in items:
-        item.update()
+    # for enemy in enemys:
+    #     enemy.update()
+    # for item in items:
+    #     item.update()
+    for game_object in map.all_objects():
+        try:
+            game_object.update()
+        except:
+            print('game_object: ', game_object.__name__)
+
     if not player.is_alive:
         if player.y < 0:
             game_framework.change_state(title_state)
@@ -132,13 +139,19 @@ def update():
 
 def draw():
     clear_canvas()
-    grass.draw()
-    for enemy in enemys:
-        enemy.draw()
-    for item in items:
-        item.draw(player.current_status)
+    # grass.draw()
+    # for enemy in enemys:
+    #     enemy.draw()
+    # for item in items:
+    #     item.draw(player.current_status) # 개선 필요
+    for game_object in map.all_objects():
+        try:
+            game_object.draw()
+        except:
+            print('game_object: ', game_object.__name__)
     player.draw()
 
+    # 충돌 확인용 코드
     player_x_size, player_y_size = player.return_size()
     x3 = player.x - player_x_size / 2
     x4 = player.x + player_x_size / 2

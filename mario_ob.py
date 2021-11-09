@@ -3,12 +3,17 @@ from pico2d import *
 
 star_time = 100 # 스타 지속 시간
 
+
 class Grass:
     def __init__(self): # 생성자
         self.image = load_image('grass.png')
 
     def draw(self):
         self.image.draw(400, 30)
+
+    def update(self):
+        pass
+
 
 class Mario:
     image_1 = None

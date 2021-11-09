@@ -1,8 +1,40 @@
-# 맵 디자인 할 방법
-# 여러 스테이지를 효율적으로 로들 할 수 있어야 한다.
-# 효율적으로 관리 할 수 있어야 한다. 효율적인게 뭔데?
-# 후보 1 map.py에서 위치의 배열을 가져와 생성
-# x, y, type의 튜플 배열을 만든다.
 
-# 스테이지 1-1
-# 파이썬 이중 배열 생성방법?
+# layer 0: Background Objects
+# layer 1: Foreground Objects
+# layer 2: Player Objects
+# layer 3: Event Objects
+objects = [[], []]
+
+
+def add_object(o, layer): # 게임 월드에 객체 추가
+    objects[layer].append(o)
+
+
+def add_objects(l, layer): # 게임 월드에 객체들을 추가
+    objects[layer] += l
+
+
+def remove_object(o):
+    for i in range(len(objects)):
+        if o in objects[i]:
+            objects[i].remove(o)
+            del o
+            break
+
+
+def clear():
+    for o in all_objects():
+        del o
+    for l in objects:
+        l.clear()
+
+
+def destroy():
+    clear()
+    objects.clear()
+
+
+def all_objects():
+    for i in range(len(objects)):
+        for o in objects[i]:
+            yield o # yield???
