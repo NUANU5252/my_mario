@@ -3,6 +3,9 @@
 # layer 1: Foreground Objects
 # layer 2: Player Objects
 # layer 3: Event Objects
+
+# game world를 이용하여 map을 작성하고 main_state에 넘기도록 만들자.
+
 objects = [[], []]
 
 
