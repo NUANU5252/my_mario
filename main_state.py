@@ -9,6 +9,7 @@ from crash_check import *
 import game_framework
 import title_state
 import map
+import game_world
 
 
 name = "MainState"
@@ -23,16 +24,17 @@ font = None
 def enter():
     global player, enemys, items, grass
     player = Mario()
-    enemys = []
-    items = []
-    enemys.append(Enemy(x=50))
-    enemys.append(Enemy(x=600, type=1))
-    for i in range(4):
-        items.append(Item(x=100 + 100*i, y=250, type=i))
-    grass = Grass()
-    map.add_object(grass, 0) # 이것도 레이어 1로 옮긴다.
-    map.add_objects(enemys, 1)
-    map.add_objects(items, 1)
+    map.world_1_1()
+    # enemys = []
+    # items = []
+    # enemys.append(Enemy(x=50))
+    # enemys.append(Enemy(x=600, type=1))
+    # for i in range(4):
+    #     items.append(Item(x=100 + 100*i, y=250, type=i))
+    # grass = Grass()
+    # map.add_object(grass, 0) # 이것도 레이어 1로 옮긴다.
+    # map.add_objects(enemys, 1)
+    # map.add_objects(items, 1)
 #     플레이어 포함 보류
 
 
@@ -100,7 +102,7 @@ def update():
     #     enemy.update()
     # for item in items:
     #     item.update()
-    for game_object in map.all_objects():
+    for game_object in game_world.all_objects():
         try:
             game_object.update()
         except:
@@ -117,7 +119,7 @@ def update():
     y3 = player.y - player_y_size / 2
     y4 = player.y + player_y_size / 2
 
-    for item in items:
+    for item in game_world.objects[2]:
         x1 = item.x - item.x_size/2
         x2 = item.x + item.x_size/2
         y1 = item.y - item.y_size / 2
@@ -127,7 +129,7 @@ def update():
             if player.collision_with_item(item):
                 item.__del__()
 
-    for enemy in enemys:
+    for enemy in game_world.objects[1]:
         x1 = enemy.x - enemy.x_size / 2
         x2 = enemy.x + enemy.x_size / 2
         y1 = enemy.y - enemy.y_size / 2
@@ -144,7 +146,7 @@ def draw():
     #     enemy.draw()
     # for item in items:
     #     item.draw(player.current_status) # 개선 필요
-    for game_object in map.all_objects():
+    for game_object in game_world.all_objects():
         try:
             game_object.draw()
         except:
@@ -158,7 +160,7 @@ def draw():
     y3 = player.y - player_y_size / 2
     y4 = player.y + player_y_size / 2
 
-    item = items[2]
+    item = game_world.objects[2][2]
     x1 = item.x - item.x_size / 2
     x2 = item.x + item.x_size / 2
     y1 = item.y - item.y_size / 2

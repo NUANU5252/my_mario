@@ -1,43 +1,22 @@
+from mario_ob import *
+import game_world
 
-# layer 0: Background Objects
-# layer 1: Foreground Objects
-# layer 2: Player Objects
-# layer 3: Event Objects
+enemys = None
+items = None
+grass = None
 
-# game world를 이용하여 map을 작성하고 main_state에 넘기도록 만들자.
+def world_1_1():
+    global enemys, items, grass
 
-objects = [[], []]
+    enemys = []
+    items = []
+    enemys.append(Enemy(x=50))
+    enemys.append(Enemy(x=600, type=1))
+    for i in range(4):
+        # game_world.add_object(Item(x=100 + 100 * i, y=250, type=i), 2)
+        items.append(Item(x=100 + 100 * i, y=250, type=i))
+    grass = Grass()
+    game_world.add_object(grass, 0)
+    game_world.add_objects(items, 2)
+    game_world.add_objects(enemys, 1)
 
-
-def add_object(o, layer): # 게임 월드에 객체 추가
-    objects[layer].append(o)
-
-
-def add_objects(l, layer): # 게임 월드에 객체들을 추가
-    objects[layer] += l
-
-
-def remove_object(o):
-    for i in range(len(objects)):
-        if o in objects[i]:
-            objects[i].remove(o)
-            del o
-            break
-
-
-def clear():
-    for o in all_objects():
-        del o
-    for l in objects:
-        l.clear()
-
-
-def destroy():
-    clear()
-    objects.clear()
-
-
-def all_objects():
-    for i in range(len(objects)):
-        for o in objects[i]:
-            yield o # yield???
