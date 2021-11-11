@@ -82,6 +82,11 @@ def quit():
     running = False
 
 
+import time
+# 다음 러닝까지 걸린 시간
+frame_time = 0.0
+
+
 def run(start_state):
     global running, stack
     running = True
@@ -89,10 +94,15 @@ def run(start_state):
     stack = [start_state]
     start_state.enter()
 
+    global frame_time
+    current_time = time.time()
     while (running):
         stack[-1].handle_events()
         stack[-1].update()
         stack[-1].draw()
+        frame_time = time.time() - current_time
+        frame_rate = 1.0 / frame_time
+        current_time += frame_time
 
     # repeatedly delete the top of the stack
     while (len(stack) > 0):
