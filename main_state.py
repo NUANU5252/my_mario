@@ -6,6 +6,7 @@ from pico2d import *
 from mario_ob import *
 from crash_check import *
 
+import mario
 import game_framework
 import title_state
 import map
