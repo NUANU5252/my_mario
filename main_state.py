@@ -6,12 +6,11 @@ from pico2d import *
 from mario_ob import *
 from crash_check import *
 
-import mario
+import mario_
 import game_framework
 import title_state
 import map
 import game_world
-
 
 name = "MainState"
 
@@ -24,7 +23,7 @@ font = None
 
 def enter():
     global player, enemys, items, grass
-    player = Mario()
+    player = mario_.Mario()
     map.world_1_1()
     # enemys = []
     # items = []
@@ -47,7 +46,7 @@ def exit():
     # for item in items:
     #     del(item)
     # del(grass)
-    map.clear()
+    # map.clear() # ???
 
 
 def pause():
