@@ -129,6 +129,7 @@ class Mario:
             self.y_acceleration = -2
 
         if not self.is_jumping:
+            # 감속
             if not self.is_sit_down:
                 if self.x_acceleration == 0:
                     if self.x_speed > 0.5:
@@ -145,6 +146,7 @@ class Mario:
                         self.x_speed += 0.5
                     else:
                         self.x_speed = 0
+            # 가속
             if (self.x_speed <= 10) and (self.x_speed >= -10):
                 self.x_speed += self.x_acceleration
                 if self.x_speed > 10:  # 없으면 마리오가 철산고를 사용한다.@@@@@@@

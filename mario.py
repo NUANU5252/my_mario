@@ -19,10 +19,10 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # v = v_0 + at 아래 적용은 보류
 TIME_TAKES_TO_ACCELARATE = 1 # 초
 
-RUN_ACCELERATION_KMPH = 20.0 / TIME_TAKES_TO_ACCELARATE # Km / Hour
-RUN_ACCELERATION_MPM = (RUN_ACCELERATION_KMPH * 1000.0 / 60.0)
-RUN_ACCELERATION_MPS = (RUN_ACCELERATION_MPM / 60.0)
-RUN_ACCELERATION_PPS = (RUN_ACCELERATION_MPS * PIXEL_PER_METER)
+# RUN_ACCELERATION_KMPH = 20.0 / TIME_TAKES_TO_ACCELARATE # Km / Hour
+# RUN_ACCELERATION_MPM = (RUN_ACCELERATION_KMPH * 1000.0 / 60.0)
+# RUN_ACCELERATION_MPS = (RUN_ACCELERATION_MPM / 60.0)
+RUN_ACCELERATION_PPS = RUN_SPEED_PPS / TIME_TAKES_TO_ACCELARATE
 
 
 # Mario Action Speed
@@ -32,7 +32,9 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
 # Mario Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, X_MOVE, Y_MOVE = range(6)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, X_MOVE, Y_MOVE, X_STOP, Y_STOP = range(8)
+
+event_name = ['RIGHT_DOWN', 'LEFT_DOWN', 'RIGHT_UP', 'LEFT_UP', 'X_MOVE', 'Y_MOVE', 'X_STOP', 'Y_STOP']
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -45,13 +47,53 @@ key_event_table = {
 
 class IdleState:
     def enter(mario, event):
+        # print('State: ', mario.cur_state.__name__, 'Event: ', event)
+        if event == RIGHT_DOWN:
+            mario.x_acceleration += 1
+        elif event == LEFT_DOWN:
+            mario.x_acceleration -= 1
+        elif event == RIGHT_UP:
+            mario.x_acceleration -= 1
+        elif event == LEFT_UP:
+            mario.x_acceleration += 1
         pass
 
     def exit(mario, event):
+
         pass
 
     def do(mario):
+        # 가속도 설정
+
+        # 속도 설정
+        # 감속
+        if mario.x_acceleration == 0:
+            if mario.x_speed > 0.5:
+                mario.x_speed += -1
+            elif mario.x_speed < -0.5:
+                mario.x_speed += 1
+            else:
+                mario.x_speed = 0
+        # 가속
+        if (mario.x_speed <= 10) and (mario.x_speed >= -10):
+            mario.x_speed += mario.x_acceleration
+            if mario.x_speed > 10:
+                mario.x_speed = 10
+            if mario.x_speed < -10:
+                mario.x_speed = -10
+        # 방향 설정
+        if mario.x_acceleration > 0:
+            mario.dir = 0
+        elif mario.x_acceleration < 0:
+            mario.dir = 1
+        # 위치 설정
+        mario.x += mario.x_speed
+        mario.y += mario.y_speed
+        mario.x = clamp(25, mario.x, 800 - 25)
+
+
         if mario.x_speed != 0:
+            mario.frame = 0 # 런 스테이트로 갈 때 프레임 0으로 만들어주기
             mario.add_event(X_MOVE)
         if mario.y_speed != 0:
             mario.add_event(Y_MOVE)
@@ -60,19 +102,54 @@ class IdleState:
 
 class RunState:
     def enter(mario, event):
-        mario.frame = 0 # 프레임이 2개 이상인 상태로 변환시 프레임 초기화
+        # print('State: ', mario.cur_state.__name__, 'Event: ', event_name[event])
 
         if event == RIGHT_DOWN:
-            mario.x_acceleration += RUN_ACCELERATION_PPS
+            mario.x_acceleration += 1
         elif event == LEFT_DOWN:
-            mario.x_acceleration -= RUN_ACCELERATION_PPS
-        elif event == LEFT_DOWN:
-            mario.x_acceleration -= RUN_ACCELERATION_PPS
+            mario.x_acceleration -= 1
+        elif event == RIGHT_UP:
+            mario.x_acceleration -= 1
+        elif event == LEFT_UP:
+            mario.x_acceleration += 1
+
 
     def exit(mario, event):
         pass
 
     def do(mario):
+        # 가속도 설정
+
+        # 속도 설정
+        # 감속
+        if mario.x_acceleration == 0:
+            if mario.x_speed > 0.5:
+                mario.x_speed += -1
+            elif mario.x_speed < -0.5:
+                mario.x_speed += 1
+            else:
+                mario.x_speed = 0
+        # 가속
+        if (mario.x_speed <= 10) and (mario.x_speed >= -10):
+            mario.x_speed += mario.x_acceleration
+            if mario.x_speed > 10:
+                mario.x_speed = 10
+            if mario.x_speed < -10:
+                mario.x_speed = -10
+        # 방향 설정
+        if mario.x_acceleration > 0:
+            mario.dir = 0
+        elif mario.x_acceleration < 0:
+            mario.dir = 1
+        # 위치 설정
+        mario.x += mario.x_speed
+        mario.y += mario.y_speed
+        mario.x = clamp(25, mario.x, 800 - 25)
+
+        if mario.x_speed == 0:
+            mario.add_event(X_STOP)
+        if mario.y_speed != 0:
+            mario.add_event(Y_MOVE)
         mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAME_OF_RUN
 
 
@@ -113,14 +190,14 @@ class AttackState:
 
 
 next_state_table = {
-    IdleState: {X_MOVE: RunState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState},
+    IdleState: {X_MOVE: RunState, RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState},
+    RunState: {X_STOP: IdleState, RIGHT_UP: RunState, LEFT_UP: RunState, LEFT_DOWN: RunState, RIGHT_DOWN: RunState},
     JumpState: {}
 }
 
 
 class Mario:
-    def __init__(self, x = random.randint(100, 700), y=90):
+    def __init__(self, x = random.randint(350, 450), y=90):
         self.image = []
 
         self.image.append(load_image('mario_sheet_1.png'))  # 405 * 118, 16 * 6
@@ -164,6 +241,42 @@ class Mario:
 
         self.frame = 0
 
+        self.event_que = []
+        self.cur_state = IdleState
+        self.cur_state.enter(self, None)
+
+    def acceleration_update(self):
+        x_acceleration = 0
+        if self.is_right_key_down:
+            x_acceleration += 1
+        if self.is_left_key_down:
+            x_acceleration += -1
+        self.x_acceleration = x_acceleration
+
+    def return_size(self):
+        if self.current_status == 0:
+            return 48, 48
+        else:
+            return 48, 96
+
+    def collision_with_item(self, item):
+        # return 값이 ture 이면 del item
+        if item.is_alive:
+            if item.type == 0:
+                pass
+                # Item_box 방향에 따라 다르다
+            elif item.type == 1:
+                pass
+                # Item_coin
+            elif item.type == 2:
+                self.change_status()
+                item.is_alive = False
+                return True
+                # Item_power
+            elif item.type == 3:
+                pass
+                # Item_star
+
     def add_event(self, event):
         self.event_que.insert(0, event)
 
@@ -172,8 +285,18 @@ class Mario:
         if len(self.event_que) > 0:
             event = self.event_que.pop()
             self.cur_state.exit(self, event)
-            self.cur_state = next_state_table[self.cur_state][event]
+            try:
+                # 일단 아래 문장을 실행해보기
+                self.cur_state = next_state_table[self.cur_state][event]
+            except:
+            #     만약 문제가 있으면, 아래를 실행
+            #   어떤 정보가 필요??? 현재 상태 정보, 이벤트의 종류
+                print('State: ', self.cur_state.__name__, 'Event: ', event_name[event])
+                exit(-1) # 강제 종료
+                pass
             self.cur_state.enter(self, event)
+            # self.cur_state = next_state_table[self.cur_state][event]
+            # self.cur_state.enter(self, event)
 
     def draw(self):
         if self.star_count % 2 == 0:
@@ -196,6 +319,7 @@ class Mario:
             pass # 특수 효과 출력 - 별이 빙빙 도는건 어떨까
 
     def handle_event(self, event):
+        # print(event.type, event.key)
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
