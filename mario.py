@@ -11,13 +11,16 @@ FRAME_OF_RUN = 3;
 
 # Mario Run Speed
 # fill expressions correctly
-PIXEL_PER_METER = (96.0 / 20) # 96 pixel 200 cm or 140 ~ 180
+PIXEL_PER_METER = (96.0 / 2) # 96 pixel 200 cm or 140 ~ 180
 RUN_SPEED_KMPH = 20.0 # Km / Hour = 최대치
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # v = v_0 + at 아래 적용은 보류
-TIME_TAKES_TO_ACCELARATE = 1 # 초
+TIME_TAKES_TO_ACCELARATE = 0.5 # 초
+TTTA = TIME_TAKES_TO_ACCELARATE
+TIME_TAKES_TO_DECELERATION = 0.5 # 초
+TTTD = TIME_TAKES_TO_DECELERATION
 
 # RUN_ACCELERATION_KMPH = 20.0 / TIME_TAKES_TO_ACCELARATE # Km / Hour
 # RUN_ACCELERATION_MPM = (RUN_ACCELERATION_KMPH * 1000.0 / 60.0)
@@ -48,14 +51,7 @@ key_event_table = {
 class IdleState:
     def enter(mario, event):
         # print('State: ', mario.cur_state.__name__, 'Event: ', event)
-        if event == RIGHT_DOWN:
-            mario.x_acceleration += 1
-        elif event == LEFT_DOWN:
-            mario.x_acceleration -= 1
-        elif event == RIGHT_UP:
-            mario.x_acceleration -= 1
-        elif event == LEFT_UP:
-            mario.x_acceleration += 1
+        mario.acceleration_event(event)
         pass
 
     def exit(mario, event):
@@ -63,33 +59,10 @@ class IdleState:
         pass
 
     def do(mario):
-        # 가속도 설정
-
-        # 속도 설정
-        # 감속
-        if mario.x_acceleration == 0:
-            if mario.x_speed > 0.5:
-                mario.x_speed += -1
-            elif mario.x_speed < -0.5:
-                mario.x_speed += 1
-            else:
-                mario.x_speed = 0
-        # 가속
-        if (mario.x_speed <= 10) and (mario.x_speed >= -10):
-            mario.x_speed += mario.x_acceleration
-            if mario.x_speed > 10:
-                mario.x_speed = 10
-            if mario.x_speed < -10:
-                mario.x_speed = -10
-        # 방향 설정
-        if mario.x_acceleration > 0:
-            mario.dir = 0
-        elif mario.x_acceleration < 0:
-            mario.dir = 1
-        # 위치 설정
-        mario.x += mario.x_speed
-        mario.y += mario.y_speed
-        mario.x = clamp(25, mario.x, 800 - 25)
+        mario.acceleration_update()
+        mario.speed_update()
+        mario.dir_update()
+        mario.position_update()
 
 
         if mario.x_speed != 0:
@@ -103,48 +76,16 @@ class IdleState:
 class RunState:
     def enter(mario, event):
         # print('State: ', mario.cur_state.__name__, 'Event: ', event_name[event])
-
-        if event == RIGHT_DOWN:
-            mario.x_acceleration += 1
-        elif event == LEFT_DOWN:
-            mario.x_acceleration -= 1
-        elif event == RIGHT_UP:
-            mario.x_acceleration -= 1
-        elif event == LEFT_UP:
-            mario.x_acceleration += 1
-
+        mario.acceleration_event(event)
 
     def exit(mario, event):
         pass
 
     def do(mario):
-        # 가속도 설정
-
-        # 속도 설정
-        # 감속
-        if mario.x_acceleration == 0:
-            if mario.x_speed > 0.5:
-                mario.x_speed += -1
-            elif mario.x_speed < -0.5:
-                mario.x_speed += 1
-            else:
-                mario.x_speed = 0
-        # 가속
-        if (mario.x_speed <= 10) and (mario.x_speed >= -10):
-            mario.x_speed += mario.x_acceleration
-            if mario.x_speed > 10:
-                mario.x_speed = 10
-            if mario.x_speed < -10:
-                mario.x_speed = -10
-        # 방향 설정
-        if mario.x_acceleration > 0:
-            mario.dir = 0
-        elif mario.x_acceleration < 0:
-            mario.dir = 1
-        # 위치 설정
-        mario.x += mario.x_speed
-        mario.y += mario.y_speed
-        mario.x = clamp(25, mario.x, 800 - 25)
+        mario.acceleration_update()
+        mario.speed_update()
+        mario.dir_update()
+        mario.position_update()
 
         if mario.x_speed == 0:
             mario.add_event(X_STOP)
@@ -155,9 +96,14 @@ class RunState:
 
 class JumpState:
     def enter(mario, event):
-        pass
+        if event == Y_MOVE:
+            # y방향 가속도가 생김
+            pass
 
     def exit(mario, event):
+        if event == Y_MOVE:
+            # y방향 가속도가 없어짐
+            pass
         pass
 
     def do(mario):
@@ -190,8 +136,8 @@ class AttackState:
 
 
 next_state_table = {
-    IdleState: {X_MOVE: RunState, RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState},
-    RunState: {X_STOP: IdleState, RIGHT_UP: RunState, LEFT_UP: RunState, LEFT_DOWN: RunState, RIGHT_DOWN: RunState},
+    IdleState: {X_STOP: IdleState, X_MOVE: RunState, RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState},
+    RunState: {X_STOP: IdleState, X_MOVE: RunState,RIGHT_UP: RunState, LEFT_UP: RunState, LEFT_DOWN: RunState, RIGHT_DOWN: RunState},
     JumpState: {}
 }
 
@@ -245,19 +191,61 @@ class Mario:
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
 
-    def acceleration_update(self):
-        x_acceleration = 0
-        if self.is_right_key_down:
-            x_acceleration += 1
-        if self.is_left_key_down:
-            x_acceleration += -1
-        self.x_acceleration = x_acceleration
-
     def return_size(self):
         if self.current_status == 0:
             return 48, 48
         else:
             return 48, 96
+
+    def acceleration_event(self, event):
+        if event == RIGHT_DOWN:
+            self.is_right_key_down = True
+        elif event == LEFT_DOWN:
+            self.is_left_key_down = True
+        elif event == RIGHT_UP:
+            self.is_right_key_down = False
+        elif event == LEFT_UP:
+            self.is_left_key_down = False
+
+    def acceleration_update(self):
+        x_acceleration = 0
+        new_acceleration = RUN_ACCELERATION_PPS * game_framework.frame_time
+        if self.is_right_key_down:
+            x_acceleration += new_acceleration
+        if self.is_left_key_down:
+            x_acceleration += -new_acceleration
+        self.x_acceleration = x_acceleration
+
+    def speed_update(self, slip_coefficient=1.0):
+        # 속도 설정
+        # 감속
+        if self.x_acceleration == 0:
+            new_acceleration = (RUN_ACCELERATION_PPS * game_framework.frame_time)/ TIME_TAKES_TO_DECELERATION
+
+            if self.x_speed > (new_acceleration / 2) * slip_coefficient:
+                self.x_speed -= new_acceleration * slip_coefficient
+            elif self.x_speed < -(new_acceleration / 2) * slip_coefficient:
+                self.x_speed += new_acceleration * slip_coefficient
+            else:
+                self.x_speed = 0
+        # 가속
+        if (self.x_speed <= RUN_SPEED_PPS) and (self.x_speed >= -RUN_SPEED_PPS):
+            if self.x_speed * self.x_acceleration < 0:
+                self.x_speed += self.x_acceleration * slip_coefficient
+            else:
+                self.x_speed += self.x_acceleration
+            self.x_speed = clamp(-RUN_SPEED_PPS, self.x_speed, RUN_SPEED_PPS)
+
+    def position_update(self):
+        self.x += self.x_speed * game_framework.frame_time
+        self.y += self.y_speed * game_framework.frame_time
+        self.x = clamp(25, self.x, 800 - 25)
+
+    def dir_update(self):
+        if self.x_acceleration > 0:
+            self.dir = 0
+        elif self.x_acceleration < 0:
+            self.dir = 1
 
     def collision_with_item(self, item):
         # return 값이 ture 이면 del item

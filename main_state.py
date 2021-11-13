@@ -157,4 +157,4 @@ def draw():
                 + 'x_acceleration:' + str(player.x_acceleration))
 
     update_canvas()
-    delay(0.03)
+    # delay(0.03)
