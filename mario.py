@@ -99,7 +99,7 @@ class RunState:
             mario.frame = 0
             mario.add_event(X_STOP)
         else:
-            RunState.TIME_PER_ACTION = RUN_SPEED_PPS / (mario.x_speed * 4)
+            RunState.TIME_PER_ACTION = RUN_SPEED_PPS / (mario.x_speed * 1)
             RunState.ACTION_PER_TIME = 1.0 / RunState.TIME_PER_ACTION
             mario.frame = (mario.frame + RunState.FRAMES_PER_ACTION * RunState.ACTION_PER_TIME * game_framework.frame_time) % RunState.FRAMES_PER_ACTION
         if mario.y_speed != 0:
