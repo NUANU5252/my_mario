@@ -17,6 +17,6 @@ def world_1_1():
         items.append(Item(x=100 + 100 * i, y=250, type=i))
     grass = Grass()
     game_world.add_object(grass, 0)
-    game_world.add_objects(items, 2)
     game_world.add_objects(enemys, 1)
+    game_world.add_objects(items, 2)
 

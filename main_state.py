@@ -25,28 +25,13 @@ def enter():
     global player, enemys, items, grass
     player = mario.Mario()
     map.world_1_1()
-    # enemys = []
-    # items = []
-    # enemys.append(Enemy(x=50))
-    # enemys.append(Enemy(x=600, type=1))
-    # for i in range(4):
-    #     items.append(Item(x=100 + 100*i, y=250, type=i))
-    # grass = Grass()
-    # map.add_object(grass, 0) # 이것도 레이어 1로 옮긴다.
-    # map.add_objects(enemys, 1)
-    # map.add_objects(items, 1)
 #     플레이어 포함 보류
 
 
 def exit():
     global player #, enemys, items, grass
     del(player)
-    # for enemy in enemys:
-    #     del(enemy)
-    # for item in items:
-    #     del(item)
-    # del(grass)
-    # map.clear() # ???
+    game_world.clear()
 
 
 def pause():
@@ -99,10 +84,6 @@ def handle_events():
 
 def update():
     player.update()
-    # for enemy in enemys:
-    #     enemy.update()
-    # for item in items:
-    #     item.update()
     for game_object in game_world.all_objects():
         try:
             game_object.update()
@@ -113,32 +94,7 @@ def update():
         if player.y < 0:
             game_framework.change_state(title_state)
 
-    # 충돌체크
-    # player_x_size, player_y_size = player.return_size()
-    # x3 = player.x - player_x_size / 2
-    # x4 = player.x + player_x_size / 2
-    # y3 = player.y - player_y_size / 2
-    # y4 = player.y + player_y_size / 2
-    #
-    # for item in game_world.objects[2]:
-    #     x1 = item.x - item.x_size/2
-    #     x2 = item.x + item.x_size/2
-    #     y1 = item.y - item.y_size / 2
-    #     y2 = item.y + item.y_size / 2
-    #
-    #     if collision_check_2(x1, y1, x2, y2, x3, y3, x4, y4):
-    #         if player.collision_with_item(item):
-    #             item.__del__()
-    #
-    # for enemy in game_world.objects[1]:
-    #     x1 = enemy.x - enemy.x_size / 2
-    #     x2 = enemy.x + enemy.x_size / 2
-    #     y1 = enemy.y - enemy.y_size / 2
-    #     y2 = enemy.y + enemy.y_size / 2
-    #
-    #     if collision_check_2(x1, y1, x2, y2, x3, y3, x4, y4):
-    #         if player.collision_with_enemy(enemy):
-    #             enemy.__del__()
+
 
 def draw():
     clear_canvas()
@@ -157,4 +113,3 @@ def draw():
                 + 'x_acceleration:' + str(player.x_acceleration))
 
     update_canvas()
-    # delay(0.03)
