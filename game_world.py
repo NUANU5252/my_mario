@@ -1,13 +1,16 @@
 
 # layer 0: Background Objects
+
 # layer 1: Enemy Objects
 # layer 2: Item Objects
+# 아래의 오브젝트는 위 오브젝트와 충돌을 검사하는 함수가 있다.
 # layer 3: Player Objects
+
 # layer 4: Event Objects
 
 # game world를 이용하여 map을 작성하고 main_state에 넘기도록 만들자.
 
-objects = [[], [], []]
+objects = [[], [], [], [], []]
 
 
 def add_object(o, layer): # 게임 월드에 객체 추가

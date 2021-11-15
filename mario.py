@@ -32,11 +32,13 @@ Gravitational_acceleration_MPS = 10 / TIME_TAKES_TO_ACCELARATE# m/s
 Gravitational_acceleration_PPS = Gravitational_acceleration_MPS * PIXEL_PER_METER
 
 # Mario Event
-RIGHT_DOWN, LEFT_DOWN, UP_DOWN, DOWN_DOWN, \
+RIGHT_DOWN, LEFT_DOWN, UP_DOWN, DOWN_DOWN, SPACE_DOWN,\
 RIGHT_UP, LEFT_UP, UP_UP, DOWN_UP, \
-X_MOVE, Y_MOVE, X_STOP, Y_STOP = range(12)
+X_MOVE, Y_MOVE, X_STOP, Y_STOP, ATTACK_OVER = range(14)
 
-event_name = ['RIGHT_DOWN', 'LEFT_DOWN', 'UP_DOWN', 'RIGHT_UP', 'LEFT_UP', 'UP_UP', 'X_MOVE', 'Y_MOVE', 'X_STOP', 'Y_STOP']
+event_name = ['RIGHT_DOWN', 'LEFT_DOWN', 'UP_DOWN', 'DOWN_DOWN', 'SPACE_DOWN',
+              'RIGHT_UP', 'LEFT_UP', 'UP_UP', 'DOWN_UP',
+              'X_MOVE', 'Y_MOVE', 'X_STOP', 'Y_STOP', 'ATTACK_OVER']
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -49,7 +51,7 @@ key_event_table = {
     (SDL_KEYUP, SDLK_UP): UP_UP,
     (SDL_KEYUP, SDLK_DOWN): DOWN_UP,
 
-    # (SDL_KEYDOWN, SDLK_SPACE): SPACE
+    (SDL_KEYDOWN, SDLK_SPACE): SPACE_DOWN
 }
 
 
@@ -60,7 +62,6 @@ class IdleState:
         pass
 
     def exit(mario, event):
-
         pass
 
     def do(mario):
@@ -106,6 +107,7 @@ class RunState:
         if mario.y_speed != 0:
             mario.add_event(Y_MOVE)
 
+
 class JumpState:
     jump_time = 0.3 # 상승 시간
     additional_jump_time = jump_time / 2 # 높이가 추가로 증가하는 시간
@@ -142,6 +144,7 @@ class JumpState:
         mario.jump_update()
         pass
 
+
 class SitState:
     def enter(mario, event):
         mario.acceleration_event(event)
@@ -162,12 +165,24 @@ class SitState:
 
 class AttackState:
     def enter(mario, event):
-        pass
+        mario.acceleration_event(event)
+
+        if event == SPACE_DOWN and mario.is_attacking == False:
+            if mario.current_status == 2:
+                mario.is_attacking = True
+                mario.attack_count = 0.5
+                mario.fire()
+            else:
+                pass
 
     def exit(mario, event):
         pass
 
     def do(mario):
+        mario.attack_count -= game_framework.frame_time
+        if mario.attack_count < 0:
+            mario.is_attacking = False
+            mario.add_event(ATTACK_OVER)
         pass
 # 피격 상태 추가 보류
 
@@ -175,20 +190,24 @@ class AttackState:
 next_state_table = {
     IdleState: {X_STOP: IdleState, X_MOVE: RunState, Y_STOP: IdleState,
                 RIGHT_UP: IdleState, LEFT_UP: IdleState, UP_UP: IdleState, DOWN_UP: IdleState,
-                LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: JumpState, DOWN_DOWN: SitState
+                LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: JumpState, DOWN_DOWN: SitState, SPACE_DOWN: AttackState
                 },
     RunState: {X_STOP: IdleState, X_MOVE: RunState,
                RIGHT_UP: RunState, LEFT_UP: RunState, UP_UP: RunState, DOWN_UP: RunState,
-               LEFT_DOWN: RunState, RIGHT_DOWN: RunState, UP_DOWN: JumpState, DOWN_DOWN: SitState
+               LEFT_DOWN: RunState, RIGHT_DOWN: RunState, UP_DOWN: JumpState, DOWN_DOWN: SitState, SPACE_DOWN: AttackState
                },
     JumpState: {Y_STOP: IdleState,
                 RIGHT_UP: JumpState, LEFT_UP: JumpState, UP_UP: JumpState, DOWN_UP: JumpState,
-                LEFT_DOWN: JumpState, RIGHT_DOWN: JumpState, UP_DOWN: JumpState, DOWN_DOWN: JumpState
+                LEFT_DOWN: JumpState, RIGHT_DOWN: JumpState, UP_DOWN: JumpState, DOWN_DOWN: JumpState, SPACE_DOWN: JumpState
                 },
     SitState: {
                 RIGHT_UP: SitState, LEFT_UP: SitState, UP_UP: SitState, DOWN_UP: IdleState,
-                LEFT_DOWN: SitState, RIGHT_DOWN: SitState, UP_DOWN: JumpState, DOWN_DOWN: SitState
+                LEFT_DOWN: SitState, RIGHT_DOWN: SitState, UP_DOWN: JumpState, DOWN_DOWN: SitState, SPACE_DOWN: SitState
     },
+    AttackState: {ATTACK_OVER: IdleState, X_MOVE: AttackState,
+                  RIGHT_UP: AttackState, LEFT_UP: AttackState, UP_UP: AttackState, DOWN_UP: AttackState,
+                  LEFT_DOWN: AttackState, RIGHT_DOWN: AttackState, UP_DOWN: AttackState, DOWN_DOWN: AttackState, SPACE_DOWN: AttackState,
+                  }
 }
 
 
@@ -240,6 +259,10 @@ class Mario:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
+
+    def fire(self):
+        fire = Fire(self.x, self.y, self.dir)
+        game_world.add_object(fire, 3)
 
     def die(self):
         # 수정 필요
