@@ -18,6 +18,7 @@ class Fire:
     TIME_PER_ACTION = 0.1
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 4
+    MAX_BOUNCE_COUNT = 3
     #0.5초에 4프레임
 
     def __init__(self, x, y, dir): # 생성자
@@ -25,7 +26,10 @@ class Fire:
         self.y = y
         self.x_size = 16
         self.y_size = 16
+
         self.live_time = 2
+        self.bounce_count = 0
+
         self.dir = dir# 1 왼쪽, 0 오른쪽
         if self.dir == 0:
             self.x_speed = RUN_SPEED_PPS
@@ -51,9 +55,14 @@ class Fire:
                 # 좌우 충돌 방향이 x 스피드 반사
                 else:
                     self.x_speed *= -1
+                self.bounce_count += 1
                 # Item_box 방향에 따라 다르다
 
     def del_self(self):
+        print(self.bounce_count)
+        print(Fire.MAX_BOUNCE_COUNT)
+        print(self.bounce_count == Fire.MAX_BOUNCE_COUNT)
+        game_world.remove_object(self)
         pass
 
     def collision_with_enemy(self, enemy):
@@ -90,6 +99,7 @@ class Fire:
         if self.y < 30:
             self.y = 30
             self.y_speed *= -1
+            self.bounce_count += 1
 
     def update(self):
         if self.x_speed > 0:
@@ -98,8 +108,11 @@ class Fire:
             self.dir = 1
 
         if self.live_time > 0:
-            self.live_time - game_framework.frame_time
+            self.live_time -= game_framework.frame_time
         elif self.live_time <= 0:
+            self.del_self()
+            
+        if self.bounce_count == Fire.MAX_BOUNCE_COUNT:
             self.del_self()
 
         # 중력가속도
