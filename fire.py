@@ -19,7 +19,7 @@ class Fire:
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 4
     MAX_BOUNCE_COUNT = 3
-    #0.5초에 4프레임
+    #0.1초에 4프레임
 
     def __init__(self, x, y, dir): # 생성자
         self.image = load_image('sheet/fire_sheet.png')
@@ -111,7 +111,7 @@ class Fire:
             self.live_time -= game_framework.frame_time
         elif self.live_time <= 0:
             self.del_self()
-            
+
         if self.bounce_count == Fire.MAX_BOUNCE_COUNT:
             self.del_self()
 
