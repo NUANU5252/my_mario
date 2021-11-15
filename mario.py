@@ -3,6 +3,7 @@ import random
 import game_world
 from pico2d import *
 from crash_check import *
+from fire import *
 
 
 star_time = 100 # 스타 지속 시간
@@ -195,9 +196,9 @@ class Mario:
     def __init__(self, x = random.randint(350, 450), y=90):
         self.image = []
 
-        self.image.append(load_image('mario_sheet_1.png'))  # 405 * 118, 16 * 6
-        self.image.append(load_image('mario_sheet_2.png'))  # 405 * 118, 16 * 6
-        self.image.append(load_image('mario_sheet_3.png'))  # 405 * 118, 16 * 6
+        self.image.append(load_image('sheet/mario_sheet_1.png'))  # 405 * 118, 16 * 6
+        self.image.append(load_image('sheet/mario_sheet_2.png'))  # 405 * 118, 16 * 6
+        self.image.append(load_image('sheet/mario_sheet_3.png'))  # 405 * 118, 16 * 6
 
 
         # 현재 위치

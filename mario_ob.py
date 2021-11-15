@@ -7,7 +7,7 @@ star_time = 100 # 스타 지속 시간
 
 class Grass:
     def __init__(self): # 생성자
-        self.image = load_image('grass.png')
+        self.image = load_image('sheet/grass.png')
 
     def draw(self):
         self.image.draw(400, 30)
@@ -30,9 +30,9 @@ class Enemy:
     def __init__(self, x=random.randint(50, 750), y=90, type=0):
         self.type = type
         if Enemy.image_1 == None:
-            Enemy.image_1 = load_image('enemies_sheet_1.png')
+            Enemy.image_1 = load_image('sheet/enemies_sheet_1.png')
         if Enemy.image_2 == None:
-            Enemy.image_2 = load_image('enemies_sheet_2.png')
+            Enemy.image_2 = load_image('sheet/enemies_sheet_2.png')
 
         if type == 0:
             self.image = Enemy.image_1 #
@@ -91,13 +91,13 @@ class Item:
     def __init__(self, x=random.randint(50, 750), y=random.randint(140, 550), type=0):
         self.type = type
         if Item.image_box == None:
-            Item.image_box = load_image('items_sheet_box.png')
+            Item.image_box = load_image('sheet/items_sheet_box.png')
         if Item.image_coin == None:
-            Item.image_coin = load_image('items_sheet_coin.png')
+            Item.image_coin = load_image('sheet/items_sheet_coin.png')
         if Item.image_power == None:
-            Item.image_power = load_image('items_sheet_power.png')
+            Item.image_power = load_image('sheet/items_sheet_power.png')
         if Item.image_star == None:
-            Item.image_star = load_image('items_sheet_star.png')
+            Item.image_star = load_image('sheet/items_sheet_star.png')
 
         # 이미지
         if type == 0:
