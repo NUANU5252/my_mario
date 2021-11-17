@@ -109,7 +109,7 @@ class RunState:
 
 
 class JumpState:
-    jump_time = 0.3 # 상승 시간
+    jump_time = 0.35 # 상승 시간
     additional_jump_time = jump_time / 2 # 높이가 추가로 증가하는 시간
     jump_height = Gravitational_acceleration_PPS * jump_time * jump_time / 2
     def enter(mario, event):
@@ -262,7 +262,7 @@ class Mario:
 
     def fire(self):
         fire = Fire(self.x, self.y, self.dir)
-        game_world.add_object(fire, 3)
+        game_world.add_object(fire, 4)
 
     def die(self):
         # 수정 필요
@@ -302,22 +302,40 @@ class Mario:
             self.now_status = None
             self.later_status = None
 
+    def collision_with_block(self, block):
+        left_a, bottom_a, right_a, top_a = self.get_bb()
+        left_b, bottom_b, right_b, top_b = block.get_bb()
+
+        col_dir = collide_direction(self, block)
+        print(col_dir)
+        if col_dir == 2:
+            block.collision_event()
+            self.y_speed = 0
+            self.y -= top_a - bottom_b
+        elif col_dir == 6:
+            self.x_speed = 0
+            self.x += right_b - left_a
+        elif col_dir == 4:
+            self.x_speed = 0
+            self.x -= right_a - left_b
+        elif col_dir == 8:
+            pass
+        elif col_dir == 5:
+            print('asdf')
+
     def collision_with_item(self, item):
         # return 값이 ture 이면 del item
         if item.is_alive:
             if item.type == 0:
-                pass
-                # Item_box 방향에 따라 다르다
-            elif item.type == 1:
                 game_world.remove_object(item)
                 # Item_coin
-            elif item.type == 2:
+            elif item.type == 1:
                 self.change_status()
                 item.is_alive = False
                 game_world.remove_object(item)
                 return True
                 # Item_power
-            elif item.type == 3:
+            elif item.type == 2:
                 self.star_count = 5 * 12
                 game_world.remove_object(item)
                 # Item_star
@@ -332,6 +350,10 @@ class Mario:
 
     def crash_check(self):
         # 충돌체크
+        for block in game_world.objects[3]:
+            if collide(self, block):
+                self.collision_with_block(block)
+
         for item in game_world.objects[2]:
             if collide(self, item):
                 self.collision_with_item(item)

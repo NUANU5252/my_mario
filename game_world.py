@@ -3,10 +3,11 @@
 
 # layer 1: Enemy Objects
 # layer 2: Item Objects
+# layer 2: Block Objects
 # 아래의 오브젝트는 위 오브젝트와 충돌을 검사하는 함수가 있다.
-# layer 3: Player Objects
+# layer 4: Player Objects
 
-# layer 4: Event Objects
+# layer 5: Event Objects
 
 # game world를 이용하여 map을 작성하고 main_state에 넘기도록 만들자.
 
