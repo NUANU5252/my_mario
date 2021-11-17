@@ -309,15 +309,17 @@ class Mario:
                 pass
                 # Item_box 방향에 따라 다르다
             elif item.type == 1:
-                pass
+                game_world.remove_object(item)
                 # Item_coin
             elif item.type == 2:
                 self.change_status()
                 item.is_alive = False
+                game_world.remove_object(item)
                 return True
                 # Item_power
             elif item.type == 3:
-                pass
+                self.star_count = 5 * 12
+                game_world.remove_object(item)
                 # Item_star
 
     def collision_with_enemy(self, enemy, invincible_time=2):
@@ -330,36 +332,19 @@ class Mario:
 
     def crash_check(self):
         # 충돌체크
-        player_x_size, player_y_size = self.return_size()
-        x3 = self.x - player_x_size / 2
-        x4 = self.x + player_x_size / 2
-        y3 = self.y - player_y_size / 2
-        y4 = self.y + player_y_size / 2
-
         for item in game_world.objects[2]:
-            x1 = item.x - item.x_size / 2
-            x2 = item.x + item.x_size / 2
-            y1 = item.y - item.y_size / 2
-            y2 = item.y + item.y_size / 2
-
-            if collision_check_2(x1, y1, x2, y2, x3, y3, x4, y4):
+            if collide(self, item):
                 self.collision_with_item(item)
 
         for enemy in game_world.objects[1]:
-            x1 = enemy.x - enemy.x_size / 2
-            x2 = enemy.x + enemy.x_size / 2
-            y1 = enemy.y - enemy.y_size / 2
-            y2 = enemy.y + enemy.y_size / 2
-
-            if collision_check_2(x1, y1, x2, y2, x3, y3, x4, y4):
+            if collide(self, enemy):
                 self.collision_with_enemy(enemy)
-        pass
 
-    def return_size(self):
+    def get_bb(self):
         if self.current_status == 0:
-            return 48, 48
+            return self.x - 24, self.y - 48, self.x + 24, self.y
         else:
-            return 48, 96
+            return self.x - 24, self.y - 48, self.x + 24, self.y + 48
 
     def acceleration_event(self, event):
         if event == RIGHT_DOWN:

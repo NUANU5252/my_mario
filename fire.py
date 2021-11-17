@@ -65,6 +65,9 @@ class Fire:
         game_world.remove_object(self)
         pass
 
+    def get_bb(self):
+        return self.x - 8, self.y - 8, self.x + 8, self.y + 8
+
     def collision_with_enemy(self, enemy):
         if enemy.is_alive:
             enemy.is_alive = False
@@ -72,27 +75,12 @@ class Fire:
 
     def crash_check(self):
         # 충돌체크
-        x3 = self.x - self.x_size / 2
-        x4 = self.x + self.x_size / 2
-        y3 = self.y - self.y_size / 2
-        y4 = self.y + self.y_size / 2
-
         for item in game_world.objects[2]:
-            x1 = item.x - item.x_size / 2
-            x2 = item.x + item.x_size / 2
-            y1 = item.y - item.y_size / 2
-            y2 = item.y + item.y_size / 2
-
-            if collision_check_2(x1, y1, x2, y2, x3, y3, x4, y4):
+            if collide(self, item):
                 self.collision_with_item(item)
 
         for enemy in game_world.objects[1]:
-            x1 = enemy.x - enemy.x_size / 2
-            x2 = enemy.x + enemy.x_size / 2
-            y1 = enemy.y - enemy.y_size / 2
-            y2 = enemy.y + enemy.y_size / 2
-
-            if collision_check_2(x1, y1, x2, y2, x3, y3, x4, y4):
+            if collide(self, enemy):
                 self.collision_with_enemy(enemy)
 
         # 일단 바닥 아래로 안 떨어지게 만든다.

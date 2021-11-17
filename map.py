@@ -1,4 +1,6 @@
 from mario_ob import *
+from enemy import *
+from mario_ob import *
 import game_world
 
 enemys = None
