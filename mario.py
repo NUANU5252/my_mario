@@ -383,11 +383,11 @@ class Mario:
             if collide(self, enemy):
                 self.collision_with_enemy(enemy)
 
-    def get_bb(self):
+    def get_bb(self, start_x=0):
         if self.current_status == 0:
-            return self.x - 24, self.y - 48, self.x + 24, self.y
+            return self.x - 24 - start_x, self.y - 48, self.x + 24 - start_x, self.y
         else:
-            return self.x - 24, self.y - 48, self.x + 24, self.y + 48
+            return self.x - 24 - start_x, self.y - 48, self.x + 24 - start_x, self.y + 48
 
     def get_fbb(self):
         return self.x - 24, self.y - 50, self.x + 24, self.y - 48
@@ -503,22 +503,22 @@ class Mario:
                 # self.cur_state = next_state_table[self.cur_state][event]
                 # self.cur_state.enter(self, event)
 
-    def draw(self):
+    def draw(self, start_x=0):
         if int(self.star_count % 2) == 0:
             if not self.is_alive: # 사망
-                self.image[0].clip_draw(16 * 9, self.dir * 32, 16, 32, self.x, self.y, 48, 96) # 3배수 출력
+                self.image[0].clip_draw(16 * 9, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96) # 3배수 출력
             elif self.is_jumping: # 점프
-                self.image[self.current_status].clip_draw(16 * 8, self.dir * 32, 16, 32, self.x, self.y, 48, 96)
+                self.image[self.current_status].clip_draw(16 * 8, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
             elif self.is_sit_down and self.current_status != 0: # 앉기
-                self.image[self.current_status].clip_draw(16 * 9, self.dir * 32, 16, 32, self.x, self.y, 48, 96)
+                self.image[self.current_status].clip_draw(16 * 9, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
             elif self.is_attacking and self.current_status == 2: # 공격
-                self.image[self.current_status].clip_draw(16 * 10, self.dir * 32, 16, 32, self.x, self.y, 48, 96)
+                self.image[self.current_status].clip_draw(16 * 10, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
             elif self.x_speed == 0: # 기본
-                self.image[self.current_status].clip_draw(0, self.dir * 32, 16, 32, self.x, self.y, 48, 96)
+                self.image[self.current_status].clip_draw(0, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
             elif self.x_speed * self.x_acceleration < 0: # 철산고 방향전환
-                self.image[self.current_status].clip_draw(16 * 7, self.dir * 32, 16, 32, self.x, self.y, 48, 96)
+                self.image[self.current_status].clip_draw(16 * 7, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
             else: # 이동
-                self.image[self.current_status].clip_draw(16 + 16*int(self.frame % 6), self.dir * 32, 16, 32, self.x, self.y, 48, 96)
+                self.image[self.current_status].clip_draw(16 + 16*int(self.frame % 6), self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
 
         if self.star_count > 0:
             pass # 특수 효과 출력 - 별이 빙빙 도는건 어떨까

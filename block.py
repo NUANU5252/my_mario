@@ -46,25 +46,25 @@ class Block:
             if self.type == 0:
                 game_world.remove_object(self)
 
-    def get_bb(self):
-        return self.x - 24, self.y - 24, self.x + 24, self.y + 24
+    def get_bb(self, start_x=0):
+        return self.x - 24 - start_x, self.y - 24, self.x + 24 - start_x, self.y + 24
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
-    def draw(self, player_status=0):
+    def draw(self, start_x=0):
         # 타입과 큐의 상태에 따라서 달라진다.
         if self.type == 0:
-            self.image_block.clip_draw(16 * 2, 0, 16, 16, self.x, self.y, 48, 48)
+            self.image_block.clip_draw(16 * 2, 0, 16, 16, self.x - start_x, self.y, 48, 48)
         elif self.type == 1:
             if len(self.item_queue) > 0:
-                self.image_item_box.clip_draw(16 * int(self.frame), 16, 16, 16, self.x, self.y, 48, 48)
+                self.image_item_box.clip_draw(16 * int(self.frame), 16, 16, 16, self.x - start_x, self.y, 48, 48)
             else:
-                self.image_item_box.clip_draw(16 * int(self.frame), 0, 16, 16, self.x, self.y, 48, 48)
+                self.image_item_box.clip_draw(16 * int(self.frame), 0, 16, 16, self.x - start_x, self.y, 48, 48)
         elif self.type == 2:
-            self.image_block.clip_draw(16 * 0, 0, 16, 16, self.x, self.y, 48, 48)
+            self.image_block.clip_draw(16 * 0, 0, 16, 16, self.x - start_x, self.y, 48, 48)
         elif self.type == 3:
-            self.image_block.clip_draw(16 * 1, 0, 16, 16, self.x, self.y, 48, 48)
+            self.image_block.clip_draw(16 * 1, 0, 16, 16, self.x - start_x, self.y, 48, 48)
 
 
 

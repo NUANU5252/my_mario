@@ -67,11 +67,11 @@ class Item:
     def del_self(self):
         game_world.remove_object(self)
 
-    def get_bb(self):
+    def get_bb(self, start_x=0):
         if self.type == 0:
-            return self.x - 12, self.y - 24, self.x + 12, self.y + 24
+            return self.x - 12 - start_x, self.y - 24, self.x + 12 - start_x, self.y + 24
         else:
-            return self.x - 24, self.y - 24, self.x + 24, self.y + 24
+            return self.x - 24 - start_x, self.y - 24, self.x + 24 - start_x, self.y + 24
 
     def update_by_type(self):
         if self.type == 1:
@@ -158,10 +158,10 @@ class Item:
                 self.is_ready = True
                 self.y = self.start_y + 48
 
-    def draw(self):
+    def draw(self, start_x=0):
         if self.type == 0:
-            self.image.clip_draw(8 * int(self.frame), 0, 8, 16, self.x, self.y, 24, 48) # 3배수 출력
+            self.image.clip_draw(8 * int(self.frame), 0, 8, 16, self.x - start_x, self.y, 24, 48) # 3배수 출력
         elif self.type == 1:
-            self.image.clip_draw(16 * int(self.frame), self.power_type*16, 16, 16, self.x, self.y, 48, 48)
+            self.image.clip_draw(16 * int(self.frame), self.power_type*16, 16, 16, self.x - start_x, self.y, 48, 48)
         else:
-            self.image.clip_draw(int(self.frame)*16, 0, 16, 16, self.x, self.y, 48, 48)
+            self.image.clip_draw(int(self.frame)*16, 0, 16, 16, self.x - start_x, self.y, 48, 48)

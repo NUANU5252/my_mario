@@ -19,12 +19,17 @@ font = None
 
 draw_bb = False
 
+# 그림이 그려지기 시작하는 x
+start_x = 0
+
 
 def enter():
-    global player
+    global player, start_x
+
     player = mario.Mario()
     map.world_1_1()
 #     플레이어 포함 보류
+    start_x = 0
 
 
 def exit():
@@ -88,6 +93,8 @@ def handle_events():
 
 
 def update():
+    global start_x
+
     player.update()
     for game_object in game_world.all_objects():
         game_object.update()
@@ -100,6 +107,8 @@ def update():
         if player.y < 0:
             game_framework.change_state(title_state)
 
+    if player.x - start_x > 400:
+        start_x += player.x - start_x - 400
 
 
 def draw():
@@ -111,15 +120,15 @@ def draw():
     #     item.draw(player.current_status) # 개선 필요
     for game_object in game_world.all_objects():
         try:
-            game_object.draw()
+            game_object.draw(start_x)
             if draw_bb:
-                draw_rectangle(*game_object.get_bb())
+                draw_rectangle(*game_object.get_bb(start_x))
         except:
             # pass
             print('game_object: ', game_object.__name__)
-    player.draw()
+    player.draw(start_x)
     if draw_bb:
-        draw_rectangle(*player.get_bb())
+        draw_rectangle(*(player.get_bb(start_x)))
 
     debug_print('cur_state:' + str(player.cur_state) + 'x_speed:' + str(player.x_speed)
                 + 'x_acceleration:' + str(player.x_acceleration))

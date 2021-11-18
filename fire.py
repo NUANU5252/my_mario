@@ -42,8 +42,8 @@ class Fire:
         self.y_speed = 0
         self.frame = 0
 
-    def draw(self):
-        self.image.clip_draw(8 * int(self.frame % Fire.FRAMES_PER_ACTION), self.dir * 8, 8, 8, self.x, self.y, self.x_size, self.y_size)
+    def draw(self, start_x=0):
+        self.image.clip_draw(8 * int(self.frame % Fire.FRAMES_PER_ACTION), self.dir * 8, 8, 8, self.x - start_x, self.y, self.x_size, self.y_size)
 
     def collision_with_block(self, block):
         left_a, bottom_a, right_a, top_a = self.get_bb()
@@ -77,8 +77,8 @@ class Fire:
         game_world.remove_object(self)
         pass
 
-    def get_bb(self):
-        return self.x - 8, self.y - 8, self.x + 8, self.y + 8
+    def get_bb(self , start_x=0):
+        return self.x - 8 - start_x, self.y - 8, self.x + 8 - start_x, self.y + 8
 
     def collision_with_enemy(self, enemy):
         if enemy.is_alive:

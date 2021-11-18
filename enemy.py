@@ -55,14 +55,14 @@ class Enemy:
 
         self.frame = 0
 
-    def get_bb(self):
+    def get_bb(self, start_x=0):
         if self.type == 0:
-            return self.x - 24, self.y - 48, self.x + 24, self.y
+            return self.x - 24 - start_x, self.y - 48, self.x + 24 - start_x, self.y
         elif self.type == 1:
             if self.is_alive:
-                return self.x - 24, self.y - 48, self.x + 24, self.y + 24
+                return self.x - 24 - start_x, self.y - 48, self.x + 24 - start_x, self.y + 24
             else:
-                return self.x - 24, self.y - 48, self.x + 24, self.y - 6
+                return self.x - 24 - start_x, self.y - 48, self.x + 24 - start_x, self.y - 6
 
     def del_self(self):
         if self.type == 0:
@@ -125,8 +125,8 @@ class Enemy:
             self.dead_count += game_framework.frame_time
             self.del_self()
 
-    def draw(self):
+    def draw(self, start_x=0):
         if not self.is_alive: # 사망
-            self.image.clip_draw(16 * 4, self.dir * 32, 16, 32, self.x, self.y, 48, 96)
+            self.image.clip_draw(16 * 4, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
         else:
-            self.image.clip_draw(int(self.frame) * 16, self.dir*32, 16, 32, self.x, self.y, 48, 96)
+            self.image.clip_draw(int(self.frame) * 16, self.dir*32, 16, 32, self.x - start_x, self.y, 48, 96)
