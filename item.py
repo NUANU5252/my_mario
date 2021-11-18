@@ -74,16 +74,17 @@ class Item:
             return self.x - 24, self.y - 24, self.x + 24, self.y + 24
 
     def update_by_type(self):
-        if self.type == 1 and self.power_type == 1:
-            if self.x_speed > 0:
-                self.dir = 0
-            else:
-                self.dir = 1
+        if self.type == 1:
+            if self.power_type == 1:
+                if self.x_speed > 0:
+                    self.dir = 0
+                else:
+                    self.dir = 1
+                self.x += self.x_speed * game_framework.frame_time
 
             # 중력가속도
             self.y_speed -= Gravitational_acceleration_PPS * game_framework.frame_time
 
-            self.x += self.x_speed * game_framework.frame_time
             self.y += self.y_speed * game_framework.frame_time
 
         elif self.type == 2:

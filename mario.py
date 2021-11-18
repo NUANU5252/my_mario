@@ -81,6 +81,8 @@ class IdleState:
             mario.add_event(X_MOVE)
         if mario.y_speed != 0:
             mario.add_event(Y_MOVE)
+        if mario.is_on_block == False:
+            mario.add_event(Y_MOVE)
         pass
 
 
@@ -115,6 +117,8 @@ class RunState:
             RunState.ACTION_PER_TIME = 1.0 / RunState.TIME_PER_ACTION
             mario.frame = (mario.frame + RunState.FRAMES_PER_ACTION * RunState.ACTION_PER_TIME * game_framework.frame_time) % RunState.FRAMES_PER_ACTION
         if mario.y_speed != 0:
+            mario.add_event(Y_MOVE)
+        if mario.is_on_block == False:
             mario.add_event(Y_MOVE)
 
 
@@ -251,6 +255,7 @@ class Mario:
         self.is_attacking = False
         self.is_changing_status = False
         self.is_on_flag = False
+        self.is_on_block = False
         # self.is_turning = False # 보류 == x_speed * x_acceleration < 0
 
         self.is_right_key_down = False
@@ -276,14 +281,6 @@ class Mario:
     def fire(self):
         fire = Fire(self.x, self.y, self.dir)
         game_world.add_object(fire, 4)
-
-    def die(self):
-        # 수정 필요
-        self.x_speed = 0
-        self.x_acceleration = 0
-        self.y_speed = 20
-        self.y_acceleration = -2
-        self.is_jumping = False
 
     def change_status(self, is_upgrade=True):
         if not self.is_changing_status:
@@ -370,10 +367,13 @@ class Mario:
                     self.star_count = invincible_time * 12
 
     def crash_check(self):
+        self.is_on_block = False
         # 충돌체크
         for block in game_world.objects[3]:
             if collide(self, block):
                 self.collision_with_block(block)
+            if collide(self, block, True):
+                self.is_on_block = True
 
         for item in game_world.objects[2]:
             if collide(self, item):
@@ -466,10 +466,18 @@ class Mario:
     def add_event(self, event):
         self.event_que.insert(0, event)
 
+    def die(self):
+        # 수정 필요
+        self.x_speed = 0
+        self.x_acceleration = 0
+        self.y_speed = Gravitational_acceleration_PPS * 0.35
+        self.y_acceleration = -Gravitational_acceleration_PPS
+        self.is_jumping = False
+
     def update(self):
         if not self.is_alive:
             self.y_speed += self.y_acceleration * game_framework.frame_time
-            self.y += self.y_speed
+            self.y += self.y_speed * game_framework.frame_time
         elif self.is_changing_status:
             self.status_update()
         else:
