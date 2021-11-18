@@ -229,7 +229,7 @@ next_state_table = {
 
 
 class Mario:
-    def __init__(self, x = random.randint(350, 450), y=90):
+    def __init__(self, x=3 * 48, y=90):
         self.image = []
 
         self.image.append(load_image('sheet/mario_sheet_1.png'))  # 405 * 118, 16 * 6
@@ -320,7 +320,7 @@ class Mario:
         print(col_dir)
         if col_dir == 2:
             if self.cur_state == JumpState:
-                block.collision_event()
+                block.collision_event(self)
                 self.y_speed = 0
                 self.y -= top_a - bottom_b + 1
         elif col_dir == 6:
@@ -359,9 +359,17 @@ class Mario:
                 # Item_star
 
     def collision_with_enemy(self, enemy, invincible_time=2):
+        left_a, bottom_a, right_a, top_a = self.get_bb()
+        left_b, bottom_b, right_b, top_b = enemy.get_bb()
         # return 값이 ture 이면 del item
         if enemy.is_alive:
-            if True: # 방향에 따라서
+            col_dir = collide_direction(self, enemy)
+            print(col_dir)
+            if col_dir == 8:
+                # y_speed 보정, 적 죽이기
+                self.y_speed = Gravitational_acceleration_PPS * 0.2
+                enemy.is_alive = False
+            else:
                 if self.star_count == 0: # 무적이 아니면
                     self.change_status(False)
                     self.star_count = invincible_time * 12
@@ -385,9 +393,9 @@ class Mario:
 
     def get_bb(self, start_x=0):
         if self.current_status == 0:
-            return self.x - 24 - start_x, self.y - 48, self.x + 24 - start_x, self.y
+            return self.x - 23 - start_x, self.y - 48, self.x + 23 - start_x, self.y
         else:
-            return self.x - 24 - start_x, self.y - 48, self.x + 24 - start_x, self.y + 48
+            return self.x - 23 - start_x, self.y - 48, self.x + 23 - start_x, self.y + 48
 
     def get_fbb(self):
         return self.x - 24, self.y - 50, self.x + 24, self.y - 48
@@ -455,7 +463,7 @@ class Mario:
     def position_update(self):
         self.x += self.x_speed * game_framework.frame_time
         self.y += self.y_speed * game_framework.frame_time
-        self.x = clamp(25, self.x, 800 - 25)
+        # self.x = clamp(25, self.x, 800 - 25)
 
     def dir_update(self):
         if self.x_acceleration > 0:

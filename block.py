@@ -34,7 +34,7 @@ class Block:
         self.frame = 0
         self. item_queue = [] + item_queue # 마리오가 박으면 배열 안의 아이템을 밷고 없으면 부셔지거나 이미지가 변한다.
 
-    def collision_event(self):
+    def collision_event(self, player):
         if len(self.item_queue) > 0:
             # 팝 해서 그 아이템 생성
             new_item_type = self.item_queue.pop(0)
@@ -43,7 +43,7 @@ class Block:
 
             pass
         else:
-            if self.type == 0:
+            if self.type == 0 and player.current_status != 0:
                 game_world.remove_object(self)
 
     def get_bb(self, start_x=0):
