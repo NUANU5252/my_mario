@@ -15,23 +15,20 @@ import game_world
 name = "MainState"
 
 player = None
-enemys = None
-items = None
-grass = None
 font = None
 
 draw_bb = False
 
 
 def enter():
-    global player, enemys, items, grass
+    global player
     player = mario.Mario()
     map.world_1_1()
 #     플레이어 포함 보류
 
 
 def exit():
-    global player #, enemys, items, grass
+    global player
     del(player)
     game_world.clear()
 
@@ -93,6 +90,7 @@ def handle_events():
 def update():
     player.update()
     for game_object in game_world.all_objects():
+        # game_object.update()
         try:
             game_object.update()
         except:

@@ -57,6 +57,8 @@ key_event_table = {
 
 class IdleState:
     def enter(mario, event):
+        mario.is_jumping = False
+
         # print('State: ', mario.cur_state.__name__, 'Event: ', event)
         mario.acceleration_event(event)
         pass
@@ -66,6 +68,9 @@ class IdleState:
 
     def do(mario):
         mario.acceleration_update()
+        # mario.y_acceleration_update()
+        # mario.y_speed_update()
+
         mario.speed_update()
         mario.dir_update()
         mario.position_update()
@@ -85,6 +90,8 @@ class RunState:
     FRAMES_PER_ACTION = 6
 
     def enter(mario, event):
+        mario.is_jumping = False
+
         # print('State: ', mario.cur_state.__name__, 'Event: ', event_name[event])
         mario.acceleration_event(event)
 
@@ -93,6 +100,9 @@ class RunState:
 
     def do(mario):
         mario.acceleration_update()
+        # mario.y_acceleration_update()
+        # mario.y_speed_update()
+
         mario.speed_update()
         mario.dir_update()
         mario.position_update()
@@ -119,6 +129,9 @@ class JumpState:
                 # mario.y_speed = JumpState.jump_height * 2 / JumpState.jump_time
                 mario.y_speed = Gravitational_acceleration_PPS * JumpState.jump_time
                 mario.is_jumping = True
+        elif event == Y_MOVE:
+            if mario.is_jumping == False:
+                mario.is_jumping = True
 
         else:
             mario.acceleration_event(event)
@@ -141,7 +154,7 @@ class JumpState:
         mario.position_update()
 
         # 충돌하면 조건에 따라서 이벤트 발생
-        mario.jump_update()
+        # mario.jump_update()
         pass
 
 
@@ -188,15 +201,15 @@ class AttackState:
 
 
 next_state_table = {
-    IdleState: {X_STOP: IdleState, X_MOVE: RunState, Y_STOP: IdleState,
+    IdleState: {X_STOP: IdleState, X_MOVE: RunState, Y_STOP: IdleState, Y_MOVE: IdleState,
                 RIGHT_UP: IdleState, LEFT_UP: IdleState, UP_UP: IdleState, DOWN_UP: IdleState,
                 LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: JumpState, DOWN_DOWN: SitState, SPACE_DOWN: AttackState
                 },
-    RunState: {X_STOP: IdleState, X_MOVE: RunState,
+    RunState: {X_STOP: IdleState, X_MOVE: RunState, Y_MOVE: JumpState,
                RIGHT_UP: RunState, LEFT_UP: RunState, UP_UP: RunState, DOWN_UP: RunState,
                LEFT_DOWN: RunState, RIGHT_DOWN: RunState, UP_DOWN: JumpState, DOWN_DOWN: SitState, SPACE_DOWN: AttackState
                },
-    JumpState: {Y_STOP: IdleState,
+    JumpState: {Y_STOP: IdleState, Y_MOVE: JumpState, X_STOP: JumpState, X_MOVE: JumpState,
                 RIGHT_UP: JumpState, LEFT_UP: JumpState, UP_UP: JumpState, DOWN_UP: JumpState,
                 LEFT_DOWN: JumpState, RIGHT_DOWN: JumpState, UP_DOWN: JumpState, DOWN_DOWN: JumpState, SPACE_DOWN: JumpState
                 },
@@ -309,23 +322,31 @@ class Mario:
         col_dir = collide_direction(self, block)
         print(col_dir)
         if col_dir == 2:
-            block.collision_event()
-            self.y_speed = 0
-            self.y -= top_a - bottom_b
+            if self.cur_state == JumpState:
+                block.collision_event()
+                self.y_speed = 0
+                self.y -= top_a - bottom_b + 1
         elif col_dir == 6:
-            self.x_speed = 0
+            # self.x_speed = 0
             self.x += right_b - left_a
         elif col_dir == 4:
-            self.x_speed = 0
+            # self.x_speed = 0
             self.x -= right_a - left_b
         elif col_dir == 8:
-            pass
+            self.y = top_b + 48 + 1
+            if self.cur_state != JumpState:
+                self.y_speed = 0
+            if self.cur_state == JumpState:
+                self.y_acceleration = 0
+                self.jump_count = 0
+                self.is_jumping = False
+                self.add_event(Y_STOP)
         elif col_dir == 5:
-            print('asdf')
+            pass
 
     def collision_with_item(self, item):
         # return 값이 ture 이면 del item
-        if item.is_alive:
+        if item.is_ready:
             if item.type == 0:
                 game_world.remove_object(item)
                 # Item_coin
@@ -368,6 +389,9 @@ class Mario:
         else:
             return self.x - 24, self.y - 48, self.x + 24, self.y + 48
 
+    def get_fbb(self):
+        return self.x - 24, self.y - 50, self.x + 24, self.y - 48
+
     def acceleration_event(self, event):
         if event == RIGHT_DOWN:
             self.is_right_key_down = True
@@ -390,8 +414,7 @@ class Mario:
     def y_acceleration_update(self):
         y_acceleration = 0
         new_acceleration = -Gravitational_acceleration_PPS * game_framework.frame_time
-        if self.cur_state == JumpState:
-            y_acceleration += new_acceleration
+        y_acceleration += new_acceleration
         self.y_acceleration = y_acceleration
 
     def speed_update(self, slip_coefficient=1.0):
@@ -420,9 +443,9 @@ class Mario:
         else:
             self.y_speed += self.y_acceleration
 
-    def jump_update(self):
-        if self.y < 90 and self.cur_state == JumpState:
-            self.y = 90
+    def jump_update(self): # 필요 없나?
+        if self.y < 72 + 48 and self.cur_state == JumpState:
+            self.y = 72 + 48
             self.y_acceleration = 0
             self.y_speed = 0
             self.jump_count = 0

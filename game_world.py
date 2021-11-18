@@ -11,7 +11,7 @@
 
 # game world를 이용하여 map을 작성하고 main_state에 넘기도록 만들자.
 
-objects = [[], [], [], [], []]
+objects = [[], [], [], [], [], []]
 
 
 def add_object(o, layer): # 게임 월드에 객체 추가

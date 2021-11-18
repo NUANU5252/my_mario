@@ -45,18 +45,30 @@ class Fire:
     def draw(self):
         self.image.clip_draw(8 * int(self.frame % Fire.FRAMES_PER_ACTION), self.dir * 8, 8, 8, self.x, self.y, self.x_size, self.y_size)
 
-    def collision_with_item(self, item):
-        # return 값이 ture 이면 del item
-        if item.is_alive:
-            if item.type == 0:
-                # 상하 충돌 방향이 y 스피드 반사
-                if abs(self.x - item.x) < abs(self.y - item.y):
-                    self.y_speed *= -1
-                # 좌우 충돌 방향이 x 스피드 반사
-                else:
-                    self.x_speed *= -1
-                self.bounce_count += 1
-                # Item_box 방향에 따라 다르다
+    def collision_with_block(self, block):
+        left_a, bottom_a, right_a, top_a = self.get_bb()
+        left_b, bottom_b, right_b, top_b = block.get_bb()
+
+        col_dir = collide_direction(self, block)
+        print(col_dir)
+        if col_dir == 2:
+            self.y -= top_a - bottom_b - 1
+        elif col_dir == 6:
+            self.x += right_b - left_a
+        elif col_dir == 4:
+            self.x -= right_a - left_b
+        elif col_dir == 8:
+            self.y += top_b - bottom_a + 1
+        elif col_dir == 5:
+            pass
+
+        # 상하 충돌 방향이 y 스피드 초기화
+        if abs(self.x - block.x) < abs(self.y - block.y):
+            self.y_speed = RUN_SPEED_PPS * 1.5
+        # 좌우 충돌 방향이 x 스피드 반사
+        else:
+            self.x_speed *= -1
+        self.bounce_count += 1
 
     def del_self(self):
         print(self.bounce_count)
@@ -75,19 +87,13 @@ class Fire:
 
     def crash_check(self):
         # 충돌체크
-        for item in game_world.objects[2]:
-            if collide(self, item):
-                self.collision_with_item(item)
+        for block in game_world.objects[3]:
+            if collide(self, block):
+                self.collision_with_block(block)
 
         for enemy in game_world.objects[1]:
             if collide(self, enemy):
                 self.collision_with_enemy(enemy)
-
-        # 일단 바닥 아래로 안 떨어지게 만든다.
-        if self.y < 30:
-            self.y = 30
-            self.y_speed *= -1
-            self.bounce_count += 1
 
     def update(self):
         if self.x_speed > 0:
