@@ -1,11 +1,12 @@
 import random
 from pico2d import *
+from crash_check import *
 
 import game_framework
 import game_world
 
 PIXEL_PER_METER = (96.0 / 2) # 96 pixel 200 cm or 140 ~ 180
-RUN_SPEED_KMPH = 10.0 # Km / Hour = 최대치
+RUN_SPEED_KMPH = 20.0 # Km / Hour = 최대치
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -13,6 +14,10 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 4
+
+TIME_TAKES_TO_ACCELARATE = 0.3 # 초
+Gravitational_acceleration_MPS = 10 / TIME_TAKES_TO_ACCELARATE# m/s
+Gravitational_acceleration_PPS = Gravitational_acceleration_MPS * PIXEL_PER_METER
 
 # type에 따라서 이미지, 프레임등이 다름
 # 0 굼바
@@ -38,7 +43,7 @@ class Enemy:
         self.y = y
 
         # 현재 속도
-        self.x_speed = RUN_SPEED_PPS
+        self.x_speed = RUN_SPEED_PPS / 2
         self.y_speed = 0
 
         self.dir = 0 # 우, 좌
@@ -73,14 +78,45 @@ class Enemy:
             self.dir = (self.dir + 1) % 2
             self.dir_count = 2
 
+        self.y_speed -= Gravitational_acceleration_PPS * game_framework.frame_time
+
         if self.dir == 0:
             self.x += self.x_speed * game_framework.frame_time
         else:
             self.x -= self.x_speed * game_framework.frame_time
+        self.y += self.y_speed * game_framework.frame_time
 
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
+        self.crash_check()
 
+    def crash_check(self):
+        for block in game_world.objects[3]:
+            if collide(self, block):
+                self.collision_with_block(block)
+
+    def collision_with_block(self, block):
+        left_a, bottom_a, right_a, top_a = self.get_bb()
+        left_b, bottom_b, right_b, top_b = block.get_bb()
+
+        col_dir = collide_direction(self, block)
+        print(col_dir)
+        if col_dir == 2:
+           pass
+        elif col_dir == 6:
+            # self.x_speed = 0
+            self.x += right_b - left_a
+        elif col_dir == 4:
+            # self.x_speed = 0
+            self.x -= right_a - left_b
+        elif col_dir == 8:
+            self.y += top_b - bottom_a + 1
+        elif col_dir == 5:
+            pass
+        if abs(self.x - block.x) < abs(self.y - block.y):
+            self.y_speed = 0
+        else:
+            self.dir = (self.dir + 1) % 2
 
     def update(self):
         if self.is_alive:

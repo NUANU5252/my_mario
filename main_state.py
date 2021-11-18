@@ -90,11 +90,11 @@ def handle_events():
 def update():
     player.update()
     for game_object in game_world.all_objects():
-        # game_object.update()
-        try:
-            game_object.update()
-        except:
-            print('game_object: ', game_object.__name__)
+        game_object.update()
+        # try:
+        #     game_object.update()
+        # except:
+        #     print('game_object: ', game_object.__name__)
 
     if not player.is_alive:
         if player.y < 0:

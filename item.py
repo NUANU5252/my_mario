@@ -75,10 +75,17 @@ class Item:
 
     def update_by_type(self):
         if self.type == 1 and self.power_type == 1:
-            if self.dir == 1:
-                self.x += self.x_speed * game_framework.frame_time
+            if self.x_speed > 0:
+                self.dir = 0
             else:
-                self.x -= self.x_speed * game_framework.frame_time
+                self.dir = 1
+
+            # 중력가속도
+            self.y_speed -= Gravitational_acceleration_PPS * game_framework.frame_time
+
+            self.x += self.x_speed * game_framework.frame_time
+            self.y += self.y_speed * game_framework.frame_time
+
         elif self.type == 2:
             if self.x_speed > 0:
                 self.dir = 0
@@ -99,7 +106,9 @@ class Item:
     def collision_by_type(self, block):
         if self.type == 1:
             if abs(self.x - block.x) < abs(self.y - block.y):
-                self.y_speed = RUN_SPEED_PPS * 1.5
+                self.y_speed = 0
+            else:
+                self.x_speed *= -1
         elif self.type == 2:
             if abs(self.x - block.x) < abs(self.y - block.y):
                 self.y_speed = RUN_SPEED_PPS * 1.5
@@ -112,7 +121,7 @@ class Item:
         left_b, bottom_b, right_b, top_b = block.get_bb()
 
         col_dir = collide_direction(self, block)
-        # print(col_dir)
+        print(col_dir)
         if col_dir == 2:
            pass
         elif col_dir == 6:

@@ -17,7 +17,7 @@ def world_1_1():
     # enemys.append(Enemy(x=50))
     enemys.append(Enemy(x=600, type=1))
 
-    for i in range(20):
+    for i in range(14):
         blocks.append(Block(24 + i * 48, 0, 2))
         blocks.append(Block(24 + i * 48, 48, 2))
         if i > 10:
@@ -27,6 +27,7 @@ def world_1_1():
     blocks.append(Block(24 + 3 * 48, 48 + 4 * 48, 0, [1, 1]))
     blocks.append(Block(24 + 5 * 48, 48 + 4 * 48, 1, [1, 1, 2]))
 
+    blocks.append(Block(24 + 13 * 48, 48 + 7 * 48, 0, [1, 2]))
 
     game_world.add_objects(blocks, 3)
     game_world.add_objects(enemys, 1)
