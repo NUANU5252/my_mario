@@ -221,7 +221,7 @@ next_state_table = {
                 RIGHT_UP: SitState, LEFT_UP: SitState, UP_UP: SitState, DOWN_UP: IdleState,
                 LEFT_DOWN: SitState, RIGHT_DOWN: SitState, UP_DOWN: JumpState, DOWN_DOWN: SitState, SPACE_DOWN: SitState
     },
-    AttackState: {ATTACK_OVER: IdleState, X_MOVE: AttackState,
+    AttackState: {ATTACK_OVER: IdleState, X_MOVE: AttackState, X_STOP : AttackState,
                   RIGHT_UP: AttackState, LEFT_UP: AttackState, UP_UP: AttackState, DOWN_UP: AttackState,
                   LEFT_DOWN: AttackState, RIGHT_DOWN: AttackState, UP_DOWN: AttackState, DOWN_DOWN: AttackState, SPACE_DOWN: AttackState,
                   }
