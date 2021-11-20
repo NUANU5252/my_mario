@@ -110,6 +110,9 @@ def update():
     if player.x - start_x > 400:
         start_x += player.x - start_x - 400
 
+    if player.x - start_x < 48:
+        player.x = start_x + 48
+
 
 def draw():
     clear_canvas()
