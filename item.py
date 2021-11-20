@@ -152,11 +152,21 @@ class Item:
             # 중력 영향과 충돌체크
             self.crash_check()
         elif not self.is_ready:
-            self.y += game_framework.frame_time * 96
-            self.ready_count += game_framework.frame_time
-            if self.ready_count > 0.5:
-                self.is_ready = True
-                self.y = self.start_y + 48
+            if self.type == 0:
+                if self.ready_count < 0.1:
+                    self.y += game_framework.frame_time * 580  # 오브젝트 크기 (48 + 10) * 시간 0.25초의 역수
+                    self.ready_count += game_framework.frame_time
+                elif self.ready_count < 0.2:
+                    self.y -= game_framework.frame_time * 580
+                    self.ready_count += game_framework.frame_time
+                else:
+                    game_world.remove_object(self)
+            else:
+                self.y += game_framework.frame_time * 96 # 오브젝트 크기 48 * 시간 0.5초의 역수
+                self.ready_count += game_framework.frame_time
+                if self.ready_count > 0.5:
+                    self.is_ready = True
+                    self.y = self.start_y + 48
 
     def draw(self, start_x=0):
         if self.type == 0:
