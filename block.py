@@ -20,12 +20,18 @@ FRAMES_PER_ACTION = 4
 class Block:
     image_item_box = None
     image_block = None
+    image_pipe = None
+    image_flag_and_flagpole = None
 
     def __init__(self, x=random.randint(50, 750), y=random.randint(140, 550), type=0, item_queue = []):
         if Block.image_item_box == None:
             Block.image_item_box = load_image('sheet/block_sheet_item_box.png')
         if Block.image_block == None:
             Block.image_block = load_image('sheet/block_img.png')
+        if Block.image_pipe == None:
+            Block.image_pipe = load_image('sheet/pipe_img.png')
+        if Block.image_flag_and_flagpole == None:
+            Block.image_flag_and_flagpole = load_image('sheet/flag_and_flagpole.png')
 
         # 타입 0: 부셔지는 블럭, 1: 부셔지지 않는 블럭 = 아이템 박스, 2: 바닥 블럭, 3: 벽 블럭
         self.type = type
