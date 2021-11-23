@@ -15,18 +15,7 @@ def world_1_1():
     enemys = []
     items = []
     # 1층 높이값 = 5, 2층 높이값 = 9
-    for i in range(69):
-        blocks.append(Block(24 + i * 48, 0, 2))
-        blocks.append(Block(24 + i * 48, 48, 2))
-    for i in range(15):
-        blocks.append(Block(24 + (i + 72) * 48, 0, 2))
-        blocks.append(Block(24 + (i + 72) * 48, 48, 2))
-    for i in range(65):
-        blocks.append(Block(24 + (i + 90) * 48, 0, 2))
-        blocks.append(Block(24 + (i + 90) * 48, 48, 2))
-    for i in range(42):
-        blocks.append(Block(24 + (i + 157) * 48, 0, 2))
-        blocks.append(Block(24 + (i + 157) * 48, 48, 2))
+
 
     blocks.append(Block(24 + 17 * 48, 48 * 5, 1, [0]))
 
@@ -37,35 +26,13 @@ def world_1_1():
     blocks.append(Block(24 + 24 * 48, 48 * 5, 1, [0]))
     blocks.append(Block(24 + 25 * 48, 48 * 5, 0))
     # 길이 2토관
-    blocks.append(Block(24 + 29 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 29 * 48, 48 * 3, 3))
-    blocks.append(Block(24 + 30 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 30 * 48, 48 * 3, 3))
+    blocks.append(Block(48 + 29 * 48, 48 * 2 - 24, 4))
     # 길이 3토관
-    blocks.append(Block(24 + 39 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 39 * 48, 48 * 3, 3))
-    blocks.append(Block(24 + 39 * 48, 48 * 4, 3))
-    blocks.append(Block(24 + 40 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 40 * 48, 48 * 3, 3))
-    blocks.append(Block(24 + 40 * 48, 48 * 4, 3))
+    blocks.append(Block(48 + 39 * 48, 48 * 3 - 24, 4))
     # 길이 4토관
-    blocks.append(Block(24 + 47 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 47 * 48, 48 * 3, 3))
-    blocks.append(Block(24 + 47 * 48, 48 * 4, 3))
-    blocks.append(Block(24 + 47 * 48, 48 * 5, 3))
-    blocks.append(Block(24 + 48 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 48 * 48, 48 * 3, 3))
-    blocks.append(Block(24 + 48 * 48, 48 * 4, 3))
-    blocks.append(Block(24 + 48 * 48, 48 * 5, 3))
+    blocks.append(Block(48 + 47 * 48, 48 * 4 - 24, 4))
     # 길이 4토관
-    blocks.append(Block(24 + 58 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 58 * 48, 48 * 3, 3))
-    blocks.append(Block(24 + 58 * 48, 48 * 4, 3))
-    blocks.append(Block(24 + 58 * 48, 48 * 5, 3))
-    blocks.append(Block(24 + 59 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 59 * 48, 48 * 3, 3))
-    blocks.append(Block(24 + 59 * 48, 48 * 4, 3))
-    blocks.append(Block(24 + 59 * 48, 48 * 5, 3))
+    blocks.append(Block(48 + 58 * 48, 48 * 4 - 24, 4))
     # 버섯
     blocks.append(Block(24 + 65 * 48, 48 * 5, 1, [1]))
 
@@ -153,20 +120,15 @@ def world_1_1():
     blocks.append(Block(24 + 159 * 48, 48 * 3, 3))
     blocks.append(Block(24 + 160 * 48, 48 * 2, 3))
     # 토관
-    blocks.append(Block(24 + 165 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 165 * 48, 48 * 3, 3))
-    blocks.append(Block(24 + 166 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 166 * 48, 48 * 3, 3))
+    blocks.append(Block(48 + 165 * 48, 48 * 2 - 24, 4))
 
     blocks.append(Block(24 + 170 * 48, 48 * 5, 0))
     blocks.append(Block(24 + 171 * 48, 48 * 5, 0))
     blocks.append(Block(24 + 172 * 48, 48 * 5, 1, [0]))
     blocks.append(Block(24 + 173 * 48, 48 * 5, 0))
     # 토관
-    blocks.append(Block(24 + 181 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 181 * 48, 48 * 3, 3))
-    blocks.append(Block(24 + 182 * 48, 48 * 2, 3))
-    blocks.append(Block(24 + 182 * 48, 48 * 3, 3))
+    blocks.append(Block(48 + 181 * 48, 48 * 2 - 24, 4))
+
     # 계단
     for i in range(8 + 1):
         for j in range(i):
@@ -179,6 +141,19 @@ def world_1_1():
     blocks.append(Block(24 + 191 * 48, 48 * 7, 3))
     blocks.append(Block(24 + 191 * 48, 48 * 8, 3))
     blocks.append(Block(24 + 191 * 48, 48 * 9, 3))
+
+    for i in range(69):
+        blocks.append(Block(24 + i * 48, 0, 2))
+        blocks.append(Block(24 + i * 48, 48, 2))
+    for i in range(15):
+        blocks.append(Block(24 + (i + 72) * 48, 0, 2))
+        blocks.append(Block(24 + (i + 72) * 48, 48, 2))
+    for i in range(65):
+        blocks.append(Block(24 + (i + 90) * 48, 0, 2))
+        blocks.append(Block(24 + (i + 90) * 48, 48, 2))
+    for i in range(42):
+        blocks.append(Block(24 + (i + 157) * 48, 0, 2))
+        blocks.append(Block(24 + (i + 157) * 48, 48, 2))
 
     enemys.append(Enemy(24 + 21 * 48, 48 * 2, 0))
     enemys.append(Enemy(24 + 41 * 48, 48 * 2, 0))

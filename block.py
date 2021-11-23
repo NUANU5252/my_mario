@@ -33,7 +33,7 @@ class Block:
         if Block.image_flag_and_flagpole == None:
             Block.image_flag_and_flagpole = load_image('sheet/flag_and_flagpole.png')
 
-        # 타입 0: 부셔지는 블럭, 1: 부셔지지 않는 블럭 = 아이템 박스, 2: 바닥 블럭, 3: 벽 블럭
+        # 타입 0: 부셔지는 블럭, 1: 부셔지지 않는 블럭 = 아이템 박스, 2: 바닥 블럭, 3: 벽 블럭, 4: 토관, 5: 깃발
         self.type = type
         self.x = x
         self.y = y
@@ -53,7 +53,12 @@ class Block:
                 game_world.remove_object(self)
 
     def get_bb(self, start_x=0):
-        return self.x - 24 - start_x, self.y - 24, self.x + 24 - start_x, self.y + 24
+        if self.type == 5:
+            pass
+        elif self.type == 4:
+            return self.x - 48 - start_x, self.y - 96, self.x + 48 - start_x, self.y + 96
+        else:
+            return self.x - 24 - start_x, self.y - 24, self.x + 24 - start_x, self.y + 24
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
@@ -71,6 +76,9 @@ class Block:
             self.image_block.clip_draw(16 * 0, 0, 16, 16, self.x - start_x, self.y, 48, 48)
         elif self.type == 3:
             self.image_block.clip_draw(16 * 1, 0, 16, 16, self.x - start_x, self.y, 48, 48)
+        elif self.type == 4:
+            self.image_pipe.clip_draw(0, 0, 32, 64, self.x - start_x, self.y, 96, 192)
+
 
 
 
