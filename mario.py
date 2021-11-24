@@ -313,6 +313,8 @@ class Mario:
             self.later_status = None
 
     def collision_with_block(self, block):
+        if block.type == 5:
+            return
         left_a, bottom_a, right_a, top_a = self.get_bb()
         left_b, bottom_b, right_b, top_b = block.get_bb()
 
