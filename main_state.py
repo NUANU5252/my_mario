@@ -122,13 +122,13 @@ def draw():
     # for item in items:
     #     item.draw(player.current_status) # 개선 필요
     for game_object in game_world.all_objects():
-        try:
+        # try:
             game_object.draw(start_x)
             if draw_bb:
                 draw_rectangle(*game_object.get_bb(start_x))
-        except:
-            # pass
-            print('game_object: ', game_object.__name__)
+        # except:
+        #     pass
+            # print('game_object: ', game_object.__name__)
     player.draw(start_x)
     if draw_bb:
         draw_rectangle(*(player.get_bb(start_x)))

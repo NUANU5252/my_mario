@@ -128,6 +128,10 @@ def world_1_1():
     blocks.append(Block(24 + 173 * 48, 48 * 5, 0))
     # 토관
     blocks.append(Block(48 + 181 * 48, 48 * 2 - 24, 4))
+    # 깃발
+    blocks.append(Block(24 + 200 * 48, 48 * 3, 5))
+    blocks.append(Block(24 + 200 * 48, 48 * 2, 3))
+
 
     # 계단
     for i in range(8 + 1):
@@ -151,7 +155,7 @@ def world_1_1():
     for i in range(65):
         blocks.append(Block(24 + (i + 90) * 48, 0, 2))
         blocks.append(Block(24 + (i + 90) * 48, 48, 2))
-    for i in range(42):
+    for i in range(44):
         blocks.append(Block(24 + (i + 157) * 48, 0, 2))
         blocks.append(Block(24 + (i + 157) * 48, 48, 2))
 

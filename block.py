@@ -54,7 +54,7 @@ class Block:
 
     def get_bb(self, start_x=0):
         if self.type == 5:
-            pass
+            return self.x - 1 - start_x, self.y - 24, self.x + 5 - start_x, self.y + 432 # 9.5 * 16 * 3 - 24
         elif self.type == 4:
             return self.x - 48 - start_x, self.y - 96, self.x + 48 - start_x, self.y + 96
         else:
@@ -78,6 +78,8 @@ class Block:
             self.image_block.clip_draw(16 * 1, 0, 16, 16, self.x - start_x, self.y, 48, 48)
         elif self.type == 4:
             self.image_pipe.clip_draw(0, 0, 32, 64, self.x - start_x, self.y, 96, 192)
+        elif self.type == 5:
+            self.image_flag_and_flagpole.clip_draw(16, 0, 16, 152, self.x - start_x, self.y + 204, 48, 456)
 
 
 
