@@ -1,6 +1,7 @@
 import random
 from pico2d import *
 from crash_check import *
+from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 
 import game_framework
 import game_world
@@ -28,32 +29,30 @@ class Enemy:
     image_1 = None
     image_2 = None
 
-    def __init__(self, x=random.randint(50, 750), y=90, type=0):
-        self.type = type
+    def __init__(self, x=random.randint(50, 750), y=90, type_=0):
+        self.patrol_order = 1
+        self.patrol_positions = []
+        self.patrol_positions.append((x, y))
+        self.patrol_positions.append((x + RUN_SPEED_PPS, y) )
+        self.x, self.y = self.patrol_positions[0]  # 시작 위치는 0, 다음 위치는 1
+        self.type = type_
         if Enemy.image_1 == None:
             Enemy.image_1 = load_image('sheet/enemies_sheet_1.png')
         if Enemy.image_2 == None:
             Enemy.image_2 = load_image('sheet/enemies_sheet_2.png')
-
-        if type == 0:
+        if self.type_ == 0:
             self.image = Enemy.image_1
-        elif type == 1:
+        elif self.type_ == 1:
             self.image = Enemy.image_2
-        self.x = x
-        self.y = y
-
         # 현재 속도
         self.x_speed = RUN_SPEED_PPS / 2
         self.y_speed = 0
-
         self.dir = 0 # 우, 좌
         self.dir_count = 2
-
         self.is_alive = True
-
         self.dead_count = 0
-
         self.frame = 0
+        self.build_behavior_tree()
 
     def get_bb(self, start_x=0):
         if self.type == 0:
