@@ -229,7 +229,7 @@ next_state_table = {
 
 
 class Mario:
-    def __init__(self, x=3 * 48, y=90):
+    def __init__(self, x=3 * 48, y=48*2):
         self.image = []
 
         self.image.append(load_image('sheet/mario_sheet_1.png'))  # 405 * 118, 16 * 6

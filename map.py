@@ -4,18 +4,62 @@ from item import *
 from block import *
 from mario_ob import *
 import game_world
+import main_state
 
 enemys = None
 items = None
 blocks = None
 
-def world_1_1():
+
+def load_world(load_type=0, start_x_=0, mario_x=0, mario_y=0):
+    # 기본값은 클리어인 경우를 불러오는것이다. 처음 시작할때는 월드1, 스테이지0이다.
+    # blocks, enenmys, items 삭제
+    # game_world 삭제
+    # game_world 의 해당하는 스테이지를 불러운다.
+    # 클리어 할 경우 stage 를 올리고 부른다.
+    # 보너스로 가는 경우
+    # 보너스에서 오는 경우
+    if load_type == 0:
+        # 클리어를 했으므로 stage 값을 1 증가시켜 로드를 한다.
+        # stage 는 월드당 4개가 있다. 구현을 할지는 모르겠는걸
+        game_world.stage_num += 1
+        if game_world.stage_num == 5:
+            game_world.world_num += 1
+            game_world.stage_num = 1
+
+        game_world.start_x = start_x_
+        main_state.player.x = 48*3
+        main_state.player.y = 48*2
+
+        if game_world.world_num == 1:
+            if game_world.stage_num == 1:
+                world_1_1()
+            elif game_world.stage_num == 2:
+                world_1_2()
+        elif game_world.world_num == 2:
+            pass
+        elif game_world.world_num == 3:
+            pass
+
+
+    elif load_type == 1:
+        # 해당 스테이지의 보너스방을 부른다.
+        pass
+    elif load_type == 2:
+        # mario_x, mario_y 가 기본값이면 오류를 발생시킨다.
+        # 원래 스테이지의 특정 부븐으로 마리오를 보낸다.
+        pass
+    pass
+
+
+def world_1_1(start_x_=0):
     global enemys, items, blocks
     blocks = []
     enemys = []
     items = []
-    # 1층 높이값 = 5, 2층 높이값 = 9
 
+
+    # 1층 높이값 = 5, 2층 높이값 = 9
 
     blocks.append(Block(24 + 17 * 48, 48 * 5, 1, [0]))
 
@@ -132,7 +176,6 @@ def world_1_1():
     blocks.append(Block(24 + 200 * 48, 48 * 3, 5))
     blocks.append(Block(24 + 200 * 48, 48 * 2, 3))
 
-
     # 계단
     for i in range(8 + 1):
         for j in range(i):
@@ -184,4 +227,32 @@ def world_1_1():
     game_world.add_objects(enemys, 1)
     game_world.add_objects(items, 2)
     game_world.add_objects(blocks, 3)
+
+
+def world_1_2(start_x_=0):
+    global enemys, items, blocks
+    blocks = []
+    enemys = []
+    items = []
+
+
+def bonus_area_1():
+    global enemys, items, blocks
+    blocks = []
+    enemys = []
+    items = []
+
+
+def bonus_area_2():
+    global enemys, items, blocks
+    blocks = []
+    enemys = []
+    items = []
+
+
+def bonus_area_3():
+    global enemys, items, blocks
+    blocks = []
+    enemys = []
+    items = []
 

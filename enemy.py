@@ -40,9 +40,9 @@ class Enemy:
             Enemy.image_1 = load_image('sheet/enemies_sheet_1.png')
         if Enemy.image_2 == None:
             Enemy.image_2 = load_image('sheet/enemies_sheet_2.png')
-        if self.type_ == 0:
+        if self.type == 0:
             self.image = Enemy.image_1
-        elif self.type_ == 1:
+        elif self.type == 1:
             self.image = Enemy.image_2
         # 현재 속도
         self.x_speed = RUN_SPEED_PPS / 2
@@ -53,6 +53,9 @@ class Enemy:
         self.dead_count = 0
         self.frame = 0
         self.build_behavior_tree()
+
+    def build_behavior_tree(self):
+        pass
 
     def get_bb(self, start_x=0):
         if self.type == 0:
