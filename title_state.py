@@ -2,6 +2,7 @@ import game_framework
 from pico2d import *
 
 import main_state
+import game_world
 
 name = "TitleState"
 image = None
@@ -11,7 +12,10 @@ def enter():
     global image
     # image = load_image('start_state_image.jpeg')
     image = load_image('Super_Mario_Bros._Logo.svg.png')
-
+    # 임시조치
+    game_world.start_x = 0
+    game_world.world_num = 1
+    game_world.stage_num = 0
 
 
 def exit():

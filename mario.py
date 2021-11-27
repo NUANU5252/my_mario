@@ -295,7 +295,6 @@ class Mario:
                     self.is_changing_status = False
             elif not is_upgrade:
                 if self.current_status == 0:
-                    self.is_alive = False
                     self.die()
                 elif self.current_status < 3:
                     self.later_status = self.current_status - 1
@@ -478,6 +477,7 @@ class Mario:
 
     def die(self):
         # 수정 필요
+        self.is_alive = False
         self.x_speed = 0
         self.x_acceleration = 0
         self.y_speed = Gravitational_acceleration_PPS * 0.35
@@ -485,6 +485,8 @@ class Mario:
         self.is_jumping = False
 
     def update(self):
+        if self.y < 0 and self.is_alive:
+            self.die()
         if not self.is_alive:
             self.y_speed += self.y_acceleration * game_framework.frame_time
             self.y += self.y_speed * game_framework.frame_time

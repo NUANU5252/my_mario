@@ -76,8 +76,8 @@ def update():
 
     if not player.is_alive:
         if player.y < 0:
-            game_framework.change_state(title_state)
-
+            # 목숨 카운트 까기
+            pass
     if player.x - game_world.start_x > 400:
         game_world.start_x += player.x - game_world.start_x - 400
 
