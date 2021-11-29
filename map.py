@@ -32,7 +32,7 @@ def choose_stage(is_bonus_stage=False):
             pass
 
 
-def set_player_pos(x=48*3, y=48*2, start_x_=0):
+def set_player_pos(x=48*3, y=48*2+24, start_x_=0):
     game_world.start_x = start_x_
     main_state.player.x = x
     main_state.player.y = y
@@ -42,6 +42,8 @@ def load_world(load_type=0):
     # 기본값은 클리어인 경우를 불러오는것이다. 처음 시작할때는 월드1, 스테이지0이다.
     # blocks, enenmys, items 삭제
     # game_world 삭제
+    game_world.clear()
+
     # game_world 의 해당하는 스테이지를 불러운다.
     # 클리어 할 경우 stage 를 올리고 부른다.
     # 보너스로 가는 경우
@@ -55,11 +57,13 @@ def load_world(load_type=0):
             game_world.stage_num = 1
 
         set_player_pos()
-        # set_player_pos(48*180) # 맵의 끝 부분
+        # set_player_pos(48*191, 24+48*10) # 맵의 끝 부분
 
         choose_stage()
     elif load_type == 1:
         # 스테이지 재 시작
+        # 마리오 상태 초기화 및 목숨 감소
+        main_state.player.reset_without_pos()
         set_player_pos()
 
         choose_stage()

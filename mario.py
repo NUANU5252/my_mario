@@ -229,17 +229,8 @@ next_state_table = {
 
 
 class Mario:
-    def __init__(self, x=3 * 48, y=48*2):
-        self.image = []
-
-        self.image.append(load_image('sheet/mario_sheet_1.png'))  # 405 * 118, 16 * 6
-        self.image.append(load_image('sheet/mario_sheet_2.png'))  # 405 * 118, 16 * 6
-        self.image.append(load_image('sheet/mario_sheet_3.png'))  # 405 * 118, 16 * 6
-
-
-        # 현재 위치
-        self.x = x
-        self.y = y
+    def reset_without_pos(self):
+        # 현재 위치 는 밖에서
         # 현재 속도
         self.x_speed = 0
         self.y_speed = 0
@@ -247,7 +238,7 @@ class Mario:
         self.x_acceleration = 0
         self.y_acceleration = 0
         # 방향
-        self.dir = 0 # 1 왼쪽, 0 오른쪽
+        self.dir = 0  # 1 왼쪽, 0 오른쪽
         # 부울변수
         self.is_jumping = False
         self.is_sit_down = False
@@ -260,15 +251,15 @@ class Mario:
 
         self.is_right_key_down = False
         self.is_left_key_down = False
-        self.is_up_key_down = False     # 점프
-        self.jump_count = 0             # 점프했을때 y_speed가 더해질 수 있는 횟수
+        self.is_up_key_down = False  # 점프
+        self.jump_count = 0  # 점프했을때 y_speed가 더해질 수 있는 횟수
 
-        self.star_count = 0 # 1이상이면 무적
+        self.star_count = 0  # 1이상이면 무적
         self.status_count = 0
         self.attack_count = 0
         self.attack_cool_time = 0
 
-        self.current_status = 0 # 0 : 기본, 1 : 버섯, 2 : 꽃
+        self.current_status = 0  # 0 : 기본, 1 : 버섯, 2 : 꽃
         self.now_status = None
         self.later_status = None
 
@@ -277,6 +268,19 @@ class Mario:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
+
+    def __init__(self, x=3 * 48, y=48*2):
+        self.image = []
+
+        self.image.append(load_image('sheet/mario_sheet_1.png'))  # 405 * 118, 16 * 6
+        self.image.append(load_image('sheet/mario_sheet_2.png'))  # 405 * 118, 16 * 6
+        self.image.append(load_image('sheet/mario_sheet_3.png'))  # 405 * 118, 16 * 6
+
+
+        # 현재 위치
+        self.x = x
+        self.y = y
+        self.reset_without_pos()
 
     def fire(self):
         fire = Fire(self.x, self.y, self.dir)

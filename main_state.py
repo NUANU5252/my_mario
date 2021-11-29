@@ -76,7 +76,7 @@ def update():
 
     if not player.is_alive:
         if player.y < 0:
-            # 목숨 카운트 까기
+            map.load_world(1)
             pass
     if player.x - game_world.start_x > 400:
         game_world.start_x += player.x - game_world.start_x - 400
