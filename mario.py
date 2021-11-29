@@ -148,10 +148,10 @@ class JumpState:
             pass
         pass
 
-    def do(mario):
-        mario.acceleration_update()
+    def do(mario): # 가속도에 따라서 x_speed는 바뀌지만 키 입력에 따라서 가속도가 변하지는 않도록 변경
+        # mario.acceleration_update()
         mario.y_acceleration_update()
-        # mario.speed_update()
+        mario.speed_update()
         mario.y_speed_update()
         # 카운트를 센다 일정 시간동안만 속도를 더한다.
         mario.dir_update()
@@ -329,11 +329,11 @@ class Mario:
                 self.y_speed = 0
                 self.y -= top_a - bottom_b + 1
         elif col_dir == 6:
-            # self.x_speed = 0
-            self.x += right_b - left_a
+            self.x_speed = 0
+            self.x += right_b - left_a+1
         elif col_dir == 4:
-            # self.x_speed = 0
-            self.x -= right_a - left_b
+            self.x_speed = 0
+            self.x -= right_a - left_b+1
         elif col_dir == 8:
             self.y = top_b + 48 + 1
             if self.cur_state != JumpState:
@@ -403,7 +403,7 @@ class Mario:
             return self.x - 23 - start_x, self.y - 48, self.x + 23 - start_x, self.y + 48
 
     def get_fbb(self):
-        return self.x - 24, self.y - 50, self.x + 24, self.y - 48
+        return self.x - 20, self.y - 50, self.x + 20, self.y - 48
 
     def acceleration_event(self, event):
         if event == RIGHT_DOWN:
@@ -415,7 +415,7 @@ class Mario:
         elif event == LEFT_UP:
             self.is_left_key_down = False
 
-    def acceleration_update(self):
+    def acceleration_update(self, is_jump_state=False):
         x_acceleration = 0
         new_acceleration = RUN_ACCELERATION_PPS * game_framework.frame_time
         if self.is_right_key_down:
