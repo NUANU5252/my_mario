@@ -1,6 +1,8 @@
-def collide(a, b, use_f=False):
-    if use_f:
-        left_a, bottom_a, right_a, top_a = a.get_fbb()
+def collide(a, b, dir=5):
+    if dir == 8:
+        left_a, bottom_a, right_a, top_a = a.get_up_bb()
+    elif dir == 2:
+        left_a, bottom_a, right_a, top_a = a.get_down_bb()
     else:
         left_a, bottom_a, right_a, top_a = a.get_bb()
     left_b, bottom_b, right_b, top_b = b.get_bb()
@@ -13,7 +15,7 @@ def collide(a, b, use_f=False):
     return True
 
 
-def collide_direction(a, b):
+def collide_direction(a, b): # 8, 2 를 먼저 반환하도록 만들어야하는데; 충돌시 b에 대한 a의 방향을 반환
     left_a, bottom_a, right_a, top_a = a.get_bb()
     left_b, bottom_b, right_b, top_b = b.get_bb()
 

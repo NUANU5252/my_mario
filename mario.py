@@ -330,14 +330,14 @@ class Mario:
                 self.y -= top_a - bottom_b + 1
         elif col_dir == 6:
             self.x_speed = 0
-            self.x += right_b - left_a+1
+            self.x += right_b - left_a+5
         elif col_dir == 4:
             self.x_speed = 0
-            self.x -= right_a - left_b+1
+            self.x -= right_a - left_b+5
         elif col_dir == 8:
             self.y = top_b + 48 + 1
             if self.cur_state != JumpState:
-                self.y_speed = 0
+                self.y_speed = 0 # 필요한가?
             if self.cur_state == JumpState:
                 self.y_acceleration = 0
                 self.jump_count = 0
@@ -383,11 +383,14 @@ class Mario:
         self.is_on_block = False
         # 충돌체크
         for block in game_world.objects[3]:
+            if collide(self, block, 2):
+                self.is_on_block = True
+            if collide(self, block, 8):
+                if self.cur_state == JumpState:
+                    block.collision_event(self)
+                    self.y_speed = 0
             if collide(self, block):
                 self.collision_with_block(block)
-            if collide(self, block, True):
-                self.is_on_block = True
-
         for item in game_world.objects[2]:
             if collide(self, item):
                 self.collision_with_item(item)
@@ -396,14 +399,21 @@ class Mario:
             if collide(self, enemy):
                 self.collision_with_enemy(enemy)
 
+    # start_x 값은 그릴때만 사용해도 상관 없다.
     def get_bb(self, start_x=0):
         if self.current_status == 0:
             return self.x - 23 - start_x, self.y - 48, self.x + 23 - start_x, self.y
         else:
             return self.x - 23 - start_x, self.y - 48, self.x + 23 - start_x, self.y + 48
 
-    def get_fbb(self):
-        return self.x - 20, self.y - 50, self.x + 20, self.y - 48
+    def get_down_bb(self, start_x=0):
+        return self.x - 23 - start_x, self.y - 50, self.x + 23 - start_x, self.y - 48
+
+    def get_up_bb(self, start_x=0):
+        if self.current_status == 0:
+            return self.x - 23 - start_x, self.y - 2, self.x + 23 - start_x, self.y
+        else:
+            return self.x - 23 - start_x, self.y + 46, self.x + 23 - start_x, self.y + 48
 
     def acceleration_event(self, event):
         if event == RIGHT_DOWN:
