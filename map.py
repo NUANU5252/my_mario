@@ -56,8 +56,8 @@ def load_world(load_type=0):
             game_world.world_num += 1
             game_world.stage_num = 1
 
-        set_player_pos()
-        # set_player_pos(48*191, 24+48*10) # 맵의 끝 부분
+        # set_player_pos()
+        set_player_pos(48*191, 24+48*10) # 맵의 끝 부분
 
         choose_stage()
     elif load_type == 1:

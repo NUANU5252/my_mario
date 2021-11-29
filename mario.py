@@ -149,7 +149,7 @@ class JumpState:
         pass
 
     def do(mario): # 가속도에 따라서 x_speed는 바뀌지만 키 입력에 따라서 가속도가 변하지는 않도록 변경
-        # mario.acceleration_update()
+        mario.acceleration_update()
         mario.y_acceleration_update()
         mario.speed_update()
         mario.y_speed_update()
@@ -423,7 +423,7 @@ class Mario:
         if self.is_left_key_down:
             x_acceleration += -new_acceleration
         self.x_acceleration = x_acceleration
-        
+
     def y_acceleration_update(self):
         y_acceleration = 0
         new_acceleration = -Gravitational_acceleration_PPS * game_framework.frame_time
@@ -433,7 +433,7 @@ class Mario:
     def speed_update(self, slip_coefficient=1.0):
         # 속도 설정
         # 감속
-        if self.x_acceleration == 0: # and self.cur_state != JumpState
+        if self.x_acceleration == 0 and self.cur_state != JumpState:
             new_acceleration = (RUN_ACCELERATION_PPS * game_framework.frame_time)/ TIME_TAKES_TO_DECELERATION
 
             if self.x_speed > (new_acceleration / 2) * slip_coefficient:
@@ -443,13 +443,13 @@ class Mario:
             else:
                 self.x_speed = 0
         # 가속
-        if (self.x_speed <= RUN_SPEED_PPS) and (self.x_speed >= -RUN_SPEED_PPS):
+        if (self.x_speed <= RUN_SPEED_PPS) and (self.x_speed >= -RUN_SPEED_PPS) and self.cur_state != JumpState:
             if self.x_speed * self.x_acceleration < 0:
                 self.x_speed += self.x_acceleration * slip_coefficient
             else:
                 self.x_speed += self.x_acceleration
             self.x_speed = clamp(-RUN_SPEED_PPS, self.x_speed, RUN_SPEED_PPS)
-    
+
     def y_speed_update(self):
         if self.jump_count > 0:
             self.jump_count -= game_framework.frame_time
