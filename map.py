@@ -11,6 +11,33 @@ items = None
 blocks = None
 
 
+def choose_stage(is_bonus_stage=False):
+    if not is_bonus_stage:
+        if game_world.world_num == 1:
+            if game_world.stage_num == 1:
+                world_1_1()
+            elif game_world.stage_num == 2:
+                world_1_2()
+        else:
+            # 끝 or 오류
+            pass
+    else:
+        if game_world.world_num == 1:
+            if game_world.stage_num == 1:
+                bonus_area_1()
+            elif game_world.stage_num == 2:
+                bonus_area_2()
+        else:
+            # 끝 or 오류
+            pass
+
+
+def set_player_pos(x=48*3, y=48*2, start_x_=0):
+    game_world.start_x = start_x_
+    main_state.player.x = x
+    main_state.player.y = y
+
+
 def load_world(load_type=0):
     # 기본값은 클리어인 경우를 불러오는것이다. 처음 시작할때는 월드1, 스테이지0이다.
     # blocks, enenmys, items 삭제
@@ -27,52 +54,29 @@ def load_world(load_type=0):
             game_world.world_num += 1
             game_world.stage_num = 1
 
-        game_world.start_x = 0
-        main_state.player.x = 48*3
-        main_state.player.y = 48*2
+        set_player_pos()
+        # set_player_pos(48*180) # 맵의 끝 부분
 
-        if game_world.world_num == 1:
-            if game_world.stage_num == 1:
-                world_1_1()
-            elif game_world.stage_num == 2:
-                world_1_2()
-        # ----보너스에서 나가고 들어올때 start_x 와 player.x, y 를 조정해준다.
-        else:
-            # 끝 or 오류
-            pass
+        choose_stage()
     elif load_type == 1:
         # 스테이지 재 시작
-        game_world.start_x = 0
-        main_state.player.x = 48 * 3
-        main_state.player.y = 48 * 2
+        set_player_pos()
 
-        if game_world.world_num == 1:
-            if game_world.stage_num == 1:
-                world_1_1()
-            elif game_world.stage_num == 2:
-                world_1_2()
-        # ----보너스에서 나가고 들어올때 start_x 와 player.x, y 를 조정해준다.
-        else:
-            # 끝 or 오류
-            pass
+        choose_stage()
     elif load_type == 2:
-        # 해당 스테이지의 보너스방을 부른다.
-        game_world.start_x = 0
-        main_state.player.x = 48 * 3
-        main_state.player.y = 48 * 20  # 이거는 테스트 해볼걸
-        if game_world.world_num == 1:
-            if game_world.stage_num == 1:
-                bonus_area_1()
-            elif game_world.stage_num == 2:
-                bonus_area_2()
-        # ----보너스에서 나가고 들어올때 start_x 와 player.x, y 를 조정해준다.
-        else:
-            # 끝 or 오류
-            pass
+        # 해당 스테이지의 보너스방을 부른다. 위에서 떨어진다.
+        set_player_pos(48*3, 48*20) # y 값은 테스트 해볼걸
+
+        choose_stage(True)
     elif load_type == 3:
         # mario_x, mario_y 가 기본값이면 오류를 발생시킨다.
         # 원래 스테이지의 특정 부븐으로 마리오를 보낸다.
-        pass
+        if game_world.world_num == 1:
+            if game_world.stage_num == 1:
+                pass
+            elif game_world.stage_num == 2:
+                pass
+        choose_stage()
     pass
 
 

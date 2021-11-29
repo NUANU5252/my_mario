@@ -13,7 +13,7 @@ star_time = 100 # 스타 지속 시간
 # Mario Run Speed
 # fill expressions correctly
 PIXEL_PER_METER = (96.0 / 2) # 96 pixel 200 cm or 140 ~ 180
-RUN_SPEED_KMPH = 20.0 # Km / Hour = 최대치
+RUN_SPEED_KMPH = 30.0 # Km / Hour = 최대치  20  이 자연스러움
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
