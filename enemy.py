@@ -102,7 +102,7 @@ class Enemy:
         left_b, bottom_b, right_b, top_b = block.get_bb()
 
         col_dir = collide_direction(self, block)
-        print(col_dir)
+        # print(col_dir)
         if col_dir == 2:
            pass
         elif col_dir == 6:
