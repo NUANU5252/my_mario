@@ -68,17 +68,21 @@ def update():
 
     player.update()
     for game_object in game_world.all_objects():
-        game_object.update()
-        # try:
-        #     game_object.update()
-        # except:
-        #     print('game_object: ', game_object.__name__)
+        # game_object.update()
+        try:
+            if game_world.start_x - 48*10 < game_object.x < game_world.start_x + 48*10 + 800:
+                game_object.update()
+            elif game_world.start_x - 48*10 > game_object.x:
+                game_world.remove_object(game_object)
+        except:
+            print('game_object: ', game_object.__name__)
 
     if not player.is_alive:
         if player.y < 0:
             map.load_world(1)
             pass
-    if player.x - game_world.start_x > 400:
+
+    if player.x - game_world.start_x > 400 and game_world.start_x < 48 * 185 - 34:
         game_world.start_x += player.x - game_world.start_x - 400
 
     if player.x - game_world.start_x < 48:
@@ -94,9 +98,10 @@ def draw():
     #     item.draw(player.current_status) # 개선 필요
     for game_object in game_world.all_objects():
         try:
-            game_object.draw(game_world.start_x)
-            if draw_bb:
-                draw_rectangle(*game_object.get_bb(game_world.start_x))
+            if game_world.start_x - 48 < game_object.x < game_world.start_x + 48 + 800:
+                game_object.draw(game_world.start_x)
+                if draw_bb:
+                    draw_rectangle(*game_object.get_bb(game_world.start_x))
         except:
             print('game_object: ', game_object.__name__)
         #     pass

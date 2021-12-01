@@ -329,13 +329,13 @@ class Mario:
                 self.y_speed = 0
                 # if self.y_speed > 0:
                 #     self.y_speed = self.y_speed / 2
-                self.y -= top_a - bottom_b
+                self.y -= top_a - bottom_b + 1
         elif col_dir == 6:
             # self.x_speed = 0
-            self.x += right_b - left_a
+            self.x += right_b - left_a + 1
         elif col_dir == 4:
             # self.x_speed = 0
-            self.x -= right_a - left_b
+            self.x -= right_a - left_b + 1
         elif col_dir == 8:
             self.y = top_b + 48 + 1
             if self.cur_state != JumpState:
@@ -345,6 +345,8 @@ class Mario:
                 self.jump_count = 0
                 self.is_jumping = False
                 self.add_event(Y_STOP)
+                # self.is_on_block = True
+
         elif col_dir == 5:
             pass
 
@@ -404,12 +406,12 @@ class Mario:
     # start_x 값은 그릴때만 사용해도 상관 없다.
     def get_bb(self, start_x=0):
         if self.current_status == 0:
-            return self.x - 23 - start_x, self.y - 47, self.x + 23 - start_x, self.y
+            return self.x - 23 - start_x, self.y - 47, self.x + 22 - start_x, self.y
         else:
-            return self.x - 23 - start_x, self.y - 47, self.x + 23 - start_x, self.y + 47
+            return self.x - 23 - start_x, self.y - 47, self.x + 22 - start_x, self.y + 46
 
     def get_down_bb(self, start_x=0):
-        return self.x - 23 - start_x, self.y - 50, self.x + 23 - start_x, self.y - 48
+        return self.x - 23 - start_x, self.y - 50, self.x + 22 - start_x, self.y - 47
 
     def get_up_bb(self, start_x=0):
         if self.current_status == 0:
@@ -513,7 +515,6 @@ class Mario:
             if self.star_count < 0:
                 self.star_count = 0
 
-            self.crash_check()
             self.cur_state.do(self)
             if len(self.event_que) > 0:
                 event = self.event_que.pop()
@@ -530,6 +531,7 @@ class Mario:
                 self.cur_state.enter(self, event)
                 # self.cur_state = next_state_table[self.cur_state][event]
                 # self.cur_state.enter(self, event)
+            self.crash_check()
 
     def draw(self, start_x=0):
         if int(self.star_count % 2) == 0:

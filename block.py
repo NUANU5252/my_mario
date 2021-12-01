@@ -58,7 +58,7 @@ class Block:
         elif self.type == 4:
             return self.x - 48 - start_x, self.y - 96, self.x + 48 - start_x, self.y + 96
         else:
-            return self.x - 24 - start_x, self.y - 24, self.x + 24 - start_x, self.y + 24
+            return self.x - 24 - start_x, self.y - 24, self.x + 23 - start_x, self.y + 23
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
