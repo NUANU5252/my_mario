@@ -3,7 +3,7 @@ import json
 import os
 
 from pico2d import *
-from mario_ob import *
+# from mario_ob import *
 from crash_check import *
 
 import mario
