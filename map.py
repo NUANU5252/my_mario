@@ -56,8 +56,8 @@ def load_world(load_type=0):
             game_world.world_num += 1
             game_world.stage_num = 1
 
-        # set_player_pos()
-        set_player_pos(48*191, 24+48*10) # 맵의 끝 부분
+        set_player_pos()
+        # set_player_pos(48*191, 24+48*10) # 맵의 끝 부분
 
         choose_stage()
     elif load_type == 1:
@@ -74,10 +74,11 @@ def load_world(load_type=0):
         choose_stage(True)
     elif load_type == 3:
         # mario_x, mario_y 가 기본값이면 오류를 발생시킨다.
-        # 원래 스테이지의 특정 부븐으로 마리오를 보낸다.
+
+        # 원래 스테이지의 특정 부븐으로 마리오를 보낸다. == 정해진 위치로
         if game_world.world_num == 1:
             if game_world.stage_num == 1:
-                pass
+                set_player_pos(48 * 182, 24 + 48 * 4)
             elif game_world.stage_num == 2:
                 pass
         choose_stage()
