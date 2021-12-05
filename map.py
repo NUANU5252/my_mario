@@ -279,6 +279,10 @@ def bonus_area_1():
     enemys = []
     items = []
 
+    game_world.add_objects(enemys, 1)
+    game_world.add_objects(items, 2)
+    game_world.add_objects(blocks, 3)
+
 
 def bonus_area_2():
     global enemys, items, blocks

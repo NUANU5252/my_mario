@@ -1,5 +1,6 @@
 import game_framework
 import random
+import map
 import game_world
 from pico2d import *
 from crash_check import *
@@ -317,6 +318,8 @@ class Mario:
 
     def collision_with_block(self, block):
         if block.type == 5:
+            # 현재 높이와 깃발 최대 높이에서의 비율을 계산하여 점수를 준다.
+            map.load_world()
             return
         left_a, bottom_a, right_a, top_a = self.get_bb()
         left_b, bottom_b, right_b, top_b = block.get_bb()
@@ -327,8 +330,6 @@ class Mario:
             if self.cur_state == JumpState:
                 block.collision_event(self)
                 self.y_speed = 0
-                # if self.y_speed > 0:
-                #     self.y_speed = self.y_speed / 2
                 self.y -= top_a - bottom_b + 1
         elif col_dir == 6:
             # self.x_speed = 0
@@ -346,7 +347,6 @@ class Mario:
                 self.is_jumping = False
                 self.add_event(Y_STOP)
                 # self.is_on_block = True
-
         elif col_dir == 5:
             pass
 
@@ -389,6 +389,9 @@ class Mario:
         for block in game_world.objects[3]:
             if collide(self, block, 2):
                 self.is_on_block = True
+            # else:
+            #     self.is_on_block = False
+
             # if collide(self, block, 8):
             #     if self.cur_state == JumpState:
             #         block.collision_event(self)
