@@ -117,8 +117,8 @@ class RunState:
             RunState.TIME_PER_ACTION = RUN_SPEED_PPS / (mario.x_speed * 1)
             RunState.ACTION_PER_TIME = 1.0 / RunState.TIME_PER_ACTION
             mario.frame = (mario.frame + RunState.FRAMES_PER_ACTION * RunState.ACTION_PER_TIME * game_framework.frame_time) % RunState.FRAMES_PER_ACTION
-        if mario.y_speed != 0:
-            mario.add_event(Y_MOVE)
+        # if mario.y_speed != 0:
+        #     mario.add_event(Y_MOVE)
         if mario.is_on_block == False:
             mario.add_event(Y_MOVE)
 
@@ -178,6 +178,8 @@ class SitState:
         mario.speed_update(0.5)
         mario.position_update()
 
+        if mario.is_on_block == False:
+            mario.add_event(Y_MOVE)
         pass
 
 
@@ -218,7 +220,7 @@ next_state_table = {
                 RIGHT_UP: JumpState, LEFT_UP: JumpState, UP_UP: JumpState, DOWN_UP: JumpState,
                 LEFT_DOWN: JumpState, RIGHT_DOWN: JumpState, UP_DOWN: JumpState, DOWN_DOWN: JumpState, SPACE_DOWN: JumpState
                 },
-    SitState: {
+    SitState: {Y_MOVE: JumpState,
                 RIGHT_UP: SitState, LEFT_UP: SitState, UP_UP: SitState, DOWN_UP: IdleState,
                 LEFT_DOWN: SitState, RIGHT_DOWN: SitState, UP_DOWN: JumpState, DOWN_DOWN: SitState, SPACE_DOWN: SitState
     },
@@ -355,7 +357,7 @@ class Mario:
         # return 값이 ture 이면 del item
         if item.is_ready:
             if item.type == 0:
-                game_world.remove_object(item)
+                item.is_ready = False
                 # Item_coin
             elif item.type == 1:
                 self.change_status()
