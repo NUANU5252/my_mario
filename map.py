@@ -16,6 +16,7 @@ def choose_stage(is_bonus_stage=False):
         if game_world.world_num == 1:
             if game_world.stage_num == 1:
                 world_1_1()
+                # bonus_area_3()
             elif game_world.stage_num == 2:
                 world_1_2()
         else:
@@ -494,7 +495,7 @@ def bonus_area_2():
         items.append(Item(24 + (i + 4) * 48, 0 + 2 * 48, 0))
         blocks.append(Block(24 + (i + 4) * 48, 0 + 5 * 48, 0))
 
-    blocks.append(Block(24 + 13 * 48, 0 + 5 * 48, 1, [0, 0, 0, 0, 0]))
+    blocks.append(Block(24 + 13 * 48, 0 + 5 * 48, 1, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
 
 
     for i in range(8):
@@ -514,4 +515,63 @@ def bonus_area_3():
     blocks = []
     enemys = []
     items = []
+    game_world.max_start_x = 48 * 0
+
+    for i in range(11):
+        blocks.append(Block(24 + 0 * 48, (i + 2) * 48, 0))
+
+    blocks.append(Block(24 + 3 * 48, 5 * 48, 0))
+    blocks.append(Block(24 + 3 * 48, 6 * 48, 0))
+    blocks.append(Block(24 + 3 * 48, 7 * 48, 0))
+    blocks.append(Block(24 + 3 * 48, 8 * 48, 0))
+
+    blocks.append(Block(24 + 4 * 48, 4 * 48, 0))
+    items.append(Item(24 + 4 * 48, 5 * 48, 0))
+    blocks.append(Block(24 + 4 * 48, 7 * 48, 0))
+    blocks.append(Block(24 + 4 * 48, 8 * 48, 0))
+
+    blocks.append(Block(24 + 5 * 48, 5 * 48, 0))
+    items.append(Item(24 + 5 * 48, 6 * 48, 0))
+    blocks.append(Block(24 + 5 * 48, 8 * 48, 1, [1]))
+
+    blocks.append(Block(24 + 6 * 48, 6 * 48, 0))
+    items.append(Item(24 + 6 * 48, 7 * 48, 0))
+    items.append(Item(24 + 6 * 48, 9 * 48, 0))
+
+    blocks.append(Block(24 + 7 * 48, 7 * 48, 0))
+    blocks.append(Block(24 + 7 * 48, 8 * 48, 0))
+    items.append(Item(24 + 7 * 48, 9 * 48, 0))
+    items.append(Item(24 + 7 * 48, 10 * 48, 0))
+
+    blocks.append(Block(24 + 8 * 48, 7 * 48, 0))
+    blocks.append(Block(24 + 8 * 48, 8 * 48, 0))
+    items.append(Item(24 + 8 * 48, 9 * 48, 0))
+    items.append(Item(24 + 8 * 48, 10 * 48, 0))
+
+    blocks.append(Block(24 + 9 * 48, 6 * 48, 0))
+    items.append(Item(24 + 9 * 48, 7 * 48, 0))
+    items.append(Item(24 + 9 * 48, 9 * 48, 0))
+
+    blocks.append(Block(24 + 10 * 48, 5 * 48, 0))
+    items.append(Item(24 + 10 * 48, 6 * 48, 0))
+    blocks.append(Block(24 + 10 * 48, 8 * 48, 0))
+
+    blocks.append(Block(24 + 11 * 48, 4 * 48, 0))
+    items.append(Item(24 + 11 * 48, 5 * 48, 0))
+    blocks.append(Block(24 + 11 * 48, 7 * 48, 0))
+    blocks.append(Block(24 + 11 * 48, 8 * 48, 0))
+
+    blocks.append(Block(24 + 12 * 48, 5 * 48, 0))
+    blocks.append(Block(24 + 12 * 48, 6 * 48, 0))
+    blocks.append(Block(24 + 12 * 48, 7 * 48, 0))
+    blocks.append(Block(24 + 12 * 48, 8 * 48, 0))
+
+
+    for i in range(16):
+        blocks.append(Block(24 + i * 48, 0, 2))
+        blocks.append(Block(24 + i * 48, 48, 2))
+
+    game_world.add_objects(enemys, 1)
+    game_world.add_objects(items, 2)
+    game_world.add_objects(blocks, 3)
 
