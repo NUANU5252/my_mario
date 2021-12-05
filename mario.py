@@ -80,8 +80,8 @@ class IdleState:
         if mario.x_speed != 0:
             mario.frame = 0 # 런 스테이트로 갈 때 프레임 0으로 만들어주기
             mario.add_event(X_MOVE)
-        if mario.y_speed != 0:
-            mario.add_event(Y_MOVE)
+        # if mario.y_speed != 0:
+        #     mario.add_event(Y_MOVE)
         if mario.is_on_block == False:
             mario.add_event(Y_MOVE)
         pass
