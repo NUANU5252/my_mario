@@ -39,9 +39,12 @@ class Item:
 
         if type == 0:
             self.image = Item.image_coin
-        if type == 1:
+            self.is_ready = True  # 바로 상호작용이 가능하다.
+        elif type == 1:
             self.image = Item.image_power
-        if type == 2:
+            self.is_ready = False  # 아이템 소환이 끝나면 그때부터 상호작용이 가능하다.
+        elif type == 2:
+            self.is_ready = False  # 아이템 소환이 끝나면 그때부터 상호작용이 가능하다.
             self.image = Item.image_star
 
         self.x = x
@@ -54,7 +57,6 @@ class Item:
         self.dir = 1
 
         self.frame = 0
-        self.is_ready = False # 아이템 소환이 끝나면 그때부터 상호작용이 가능하다.
         self.ready_count = 0
 
         self.live_time = 10
@@ -69,7 +71,7 @@ class Item:
 
     def get_bb(self, start_x=0):
         if self.type == 0:
-            return self.x - 12 - start_x, self.y - 24, self.x + 12 - start_x, self.y + 24
+            return self.x - 12 - start_x, self.y - 28, self.x + 12 - start_x, self.y + 24
         else:
             return self.x - 24 - start_x, self.y - 24, self.x + 24 - start_x, self.y + 24
 
@@ -160,7 +162,7 @@ class Item:
                     self.y -= game_framework.frame_time * 580
                     self.ready_count += game_framework.frame_time
                 else:
-                    game_world.remove_object(self)
+                    self.del_self()
             else:
                 self.y += game_framework.frame_time * 96 # 오브젝트 크기 48 * 시간 0.5초의 역수
                 self.ready_count += game_framework.frame_time
