@@ -95,6 +95,7 @@ def world_1_1(start_x_=0):
     blocks = []
     enemys = []
     items = []
+    game_world.max_start_x = 48 * 185
 
     # 1층 높이값 = 5, 2층 높이값 = 9
 
@@ -278,8 +279,24 @@ def bonus_area_1():
     blocks = []
     enemys = []
     items = []
+    game_world.max_start_x = 48 * 0
 
-    for i in range(17):
+    for i in range(11):
+        blocks.append(Block(24 + 0 * 48, 0 + (i + 2) * 48, 0))
+
+    for i in range(7):
+        blocks.append(Block(24 + (i + 4) * 48, 0 + 2 * 48, 0))
+        blocks.append(Block(24 + (i + 4) * 48, 0 + 3 * 48, 0))
+        blocks.append(Block(24 + (i + 4) * 48, 0 + 4 * 48, 0))
+        items.append(Item(24 + (i + 4) * 48, 0 + 5 * 48, 0))
+        items.append(Item(24 + (i + 4) * 48, 0 + 7 * 48, 0))
+        items.append(Item(24 + (i + 4) * 48, 0 + 9 * 48, 0))
+        blocks.append(Block(24 + (i + 4) * 48, 0 + 12 * 48, 0))
+
+
+
+
+    for i in range(16):
         blocks.append(Block(24 + i * 48, 0, 2))
         blocks.append(Block(24 + i * 48, 48, 2))
 
