@@ -14,6 +14,7 @@
 objects = [[], [], [], [], [], []]
 
 start_x = 0
+max_start_x = 48 * 185
 world_num = 1
 stage_num = 0
 
