@@ -40,7 +40,7 @@ def set_player_pos(x=48*3, y=48*2+24, start_x_=0):
 
 def load_world(load_type=0):
     # 기본값은 클리어인 경우를 불러오는것이다. 처음 시작할때는 월드1, 스테이지0이다.
-    # blocks, enenmys, items 삭제
+    # blocks, enenmys, items 삭제 이건 더른곳에서 하고잇음
     # game_world 삭제
     game_world.clear()
 
@@ -112,8 +112,8 @@ def world_1_1(start_x_=0):
     blocks.append(Block(48 + 39 * 48, 48 * 3 - 24, 4))
     # 길이 4토관
     blocks.append(Block(48 + 47 * 48, 48 * 4 - 24, 4))
-    # 길이 4토관
-    blocks.append(Block(48 + 58 * 48, 48 * 4 - 24, 4))
+    # 길이 4토관 - 보너스 연결 토관 큐에 아무거나 넣으면 됨. 특정 값을 넣을때 다른 이벤트가 가능하게 하는것도
+    blocks.append(Block(48 + 58 * 48, 48 * 4 - 24, 4, [1]))
     # 버섯
     blocks.append(Block(24 + 65 * 48, 48 * 5, 1, [1]))
 
@@ -278,6 +278,10 @@ def bonus_area_1():
     blocks = []
     enemys = []
     items = []
+
+    for i in range(17):
+        blocks.append(Block(24 + i * 48, 0, 2))
+        blocks.append(Block(24 + i * 48, 48, 2))
 
     game_world.add_objects(enemys, 1)
     game_world.add_objects(items, 2)
