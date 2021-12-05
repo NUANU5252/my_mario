@@ -4,6 +4,7 @@ from item import *
 
 import game_framework
 import game_world
+import map
 
 PIXEL_PER_METER = (96.0 / 2) # 96 pixel 200 cm or 140 ~ 180
 # 블럭에 속도는 없을지도?
@@ -51,6 +52,15 @@ class Block:
         else:
             if self.type == 0 and player.current_status != 0:
                 game_world.remove_object(self)
+
+    def pipe_event(self):
+        # 플레이어가 자신의 위에서 sit_state라면
+        print('pipe event---')
+        if len(self.item_queue) == 0:
+            pass
+        else:
+            map.load_world(2)
+            pass
 
     def get_bb(self, start_x=0):
         if self.type == 5:

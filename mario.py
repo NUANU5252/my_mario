@@ -328,7 +328,8 @@ class Mario:
         print(col_dir)
         if col_dir == 2:
             if self.cur_state == JumpState:
-                block.collision_event(self)
+                if block.type != 4:
+                    block.collision_event(self)
                 self.y_speed = 0
                 self.y -= top_a - bottom_b + 1
         elif col_dir == 6:
@@ -389,13 +390,8 @@ class Mario:
         for block in game_world.objects[3]:
             if collide(self, block, 2):
                 self.is_on_block = True
-            # else:
-            #     self.is_on_block = False
-
-            # if collide(self, block, 8):
-            #     if self.cur_state == JumpState:
-            #         block.collision_event(self)
-            #         self.y_speed = 0
+                if block.type == 4 and self.cur_state == SitState:
+                    block.pipe_event()
             if collide(self, block):
                 self.collision_with_block(block)
         for item in game_world.objects[2]:
