@@ -82,7 +82,7 @@ def update():
             map.load_world(1)
             pass
 
-    if player.x - game_world.start_x > 400 and game_world.start_x < 48 * 185 - 34:
+    if player.x - game_world.start_x > 400 and game_world.start_x < 48 * 185:
         game_world.start_x += player.x - game_world.start_x - 400
 
     if player.x - game_world.start_x < 48:
