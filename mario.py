@@ -407,9 +407,9 @@ class Mario:
     # start_x 값은 그릴때만 사용해도 상관 없다.
     def get_bb(self, start_x=0):
         if self.current_status == 0:
-            return self.x - 23 - start_x, self.y - 47, self.x + 22 - start_x, self.y
+            return self.x - 23 - start_x, self.y - 47, self.x + 22 - start_x, self.y - 2
         else:
-            return self.x - 23 - start_x, self.y - 47, self.x + 22 - start_x, self.y + 46
+            return self.x - 23 - start_x, self.y - 47, self.x + 22 - start_x, self.y + 44
 
     def get_down_bb(self, start_x=0):
         return self.x - 23 - start_x, self.y - 50, self.x + 22 - start_x, self.y - 47
