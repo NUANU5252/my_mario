@@ -10,7 +10,6 @@ image = None
 
 def enter():
     global image
-    # image = load_image('start_state_image.jpeg')
     image = load_image('Super_Mario_Bros._Logo.svg.png')
     # 임시조치
     game_world.start_x = 0
@@ -37,7 +36,7 @@ def handle_events():
 
 def draw():
     clear_canvas()
-    image.clip_draw(0, 0,  1200, 477, 400, 441, 800, 318)
+    image.clip_draw(0, 0,  1200, 477, 48*8, 441 - (600 - 48 * 12), 48*16, 318)
     update_canvas()
 
 
