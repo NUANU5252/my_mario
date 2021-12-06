@@ -75,17 +75,22 @@ class Block:
 
     def draw(self, start_x=0):
         # 타입과 큐의 상태에 따라서 달라진다.
+        if game_world.is_underground:
+            draw_type = 1
+        else:
+            draw_type = 0
+
         if self.type == 0:
-            self.image_block.clip_draw(16 * 2, 0, 16, 16, self.x - start_x, self.y, 48, 48)
+            self.image_block.clip_draw(16 * 2, draw_type * 16, 16, 16, self.x - start_x, self.y, 48, 48)
         elif self.type == 1:
             if len(self.item_queue) > 0:
                 self.image_item_box.clip_draw(16 * int(self.frame), 16, 16, 16, self.x - start_x, self.y, 48, 48)
             else:
                 self.image_item_box.clip_draw(16 * int(self.frame), 0, 16, 16, self.x - start_x, self.y, 48, 48)
         elif self.type == 2:
-            self.image_block.clip_draw(16 * 0, 0, 16, 16, self.x - start_x, self.y, 48, 48)
+            self.image_block.clip_draw(16 * 0, draw_type * 16, 16, 16, self.x - start_x, self.y, 48, 48)
         elif self.type == 3:
-            self.image_block.clip_draw(16 * 1, 0, 16, 16, self.x - start_x, self.y, 48, 48)
+            self.image_block.clip_draw(16 * 1, draw_type * 16, 16, 16, self.x - start_x, self.y, 48, 48)
         elif self.type == 4:
             self.image_pipe.clip_draw(0, 0, 32, 64, self.x - start_x, self.y, 96, 192)
         elif self.type == 5:

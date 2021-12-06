@@ -17,7 +17,7 @@ start_x = 0
 max_start_x = 48 * 185
 world_num = 1
 stage_num = 0
-
+is_underground = False
 
 def add_object(o, layer): # 게임 월드에 객체 추가
     objects[layer].append(o)
