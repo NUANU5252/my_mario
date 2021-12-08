@@ -23,6 +23,7 @@ class Block:
     image_block = None
     image_pipe = None
     image_flag_and_flagpole = None
+    Break_sound = None
 
     def __init__(self, x=random.randint(50, 750), y=random.randint(140, 550), type=0, item_queue = []):
         if Block.image_item_box == None:
@@ -33,6 +34,9 @@ class Block:
             Block.image_pipe = load_image('sheet/pipe_img.png')
         if Block.image_flag_and_flagpole == None:
             Block.image_flag_and_flagpole = load_image('sheet/flag_and_flagpole.png')
+        if Block.Break_sound == None:
+            Block.Break_sound = load_wav('sound/Stomp 2.wav')
+            Block.Break_sound.set_volume(game_world.Object_volume)
 
         # 타입 0: 부셔지는 블럭, 1: 부셔지지 않는 블럭 = 아이템 박스, 2: 바닥 블럭, 3: 벽 블럭, 4: 토관, 5: 깃발
         self.type = type
@@ -52,6 +56,7 @@ class Block:
         else:
             if self.type == 0 and player.current_status != 0:
                 game_world.remove_object(self)
+                Block.Break_sound.play()
 
     def pipe_event(self):
         # 플레이어가 자신의 위에서 sit_state라면
