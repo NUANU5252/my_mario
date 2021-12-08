@@ -362,6 +362,13 @@ class Mario:
         elif col_dir == 4:
             # self.x_speed = 0
             self.x -= right_a - left_b + 1
+            if block.type == 6:
+                if len(block.item_queue) > 0:
+                    game_world.clear()
+                    map.world_1_1()
+                    map.set_player_pos(48 * 182, 24 + 48 * 4)
+                else:
+                    map.load_world(3)
         elif col_dir == 8:
             self.y = top_b + 48 + 1
             if self.cur_state != JumpState:
@@ -543,6 +550,7 @@ class Mario:
             if self.flag_count < 0:
                 map.load_world()
                 self.is_on_flag = False
+                self.flag_count = 6
         elif not self.is_alive:
             self.y_speed += self.y_acceleration * game_framework.frame_time
             self.y += self.y_speed * game_framework.frame_time

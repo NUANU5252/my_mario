@@ -23,6 +23,9 @@ class Block:
     image_block = None
     image_pipe = None
     image_flag_and_flagpole = None
+    image_horizontal_pipe_1 = None
+    image_horizontal_pipe_2 = None
+
     Break_sound = None
 
     def __init__(self, x=random.randint(50, 750), y=random.randint(140, 550), type=0, item_queue = []):
@@ -34,11 +37,16 @@ class Block:
             Block.image_pipe = load_image('sheet/pipe_img.png')
         if Block.image_flag_and_flagpole == None:
             Block.image_flag_and_flagpole = load_image('sheet/flag_and_flagpole.png')
+        if Block.image_horizontal_pipe_1 == None:
+            Block.image_horizontal_pipe_1 = load_image('sheet/horizontal_pipe_img_1.png')
+        if Block.image_horizontal_pipe_1 == None:
+            Block.image_horizontal_pipe_1 = load_image('sheet/horizontal_pipe_img_2.png')
+
         if Block.Break_sound == None:
             Block.Break_sound = load_wav('sound/Stomp 2.wav')
             Block.Break_sound.set_volume(game_world.Object_volume)
 
-        # 타입 0: 부셔지는 블럭, 1: 부셔지지 않는 블럭 = 아이템 박스, 2: 바닥 블럭, 3: 벽 블럭, 4: 토관, 5: 깃발
+        # 타입 0: 부셔지는 블럭, 1: 부셔지지 않는 블럭 = 아이템 박스, 2: 바닥 블럭, 3: 벽 블럭, 4: 토관, 5: 깃발, 6,7:수평 토관
         self.type = type
         self.x = x
         self.y = y
@@ -70,6 +78,10 @@ class Block:
     def get_bb(self, start_x=0):
         if self.type == 5:
             return self.x - 1 - start_x, self.y - 24, self.x + 5 - start_x, self.y + 432 # 9.5 * 16 * 3 - 24
+        elif self.type == 6:
+            return self.x - 48 - start_x, self.y - 24, self.x + 48 - start_x, self.y + 72
+        elif self.type == 7:
+            return self.x - 1 - start_x, self.y - 24, self.x + 5 - start_x, self.y + 432
         elif self.type == 4:
             return self.x - 48 - start_x, self.y - 96, self.x + 48 - start_x, self.y + 96
         else:
@@ -100,6 +112,10 @@ class Block:
             self.image_pipe.clip_draw(0, 0, 32, 64, self.x - start_x, self.y, 96, 192)
         elif self.type == 5:
             self.image_flag_and_flagpole.clip_draw(16, 0, 16, 152, self.x - start_x, self.y + 204, 48, 456)
+        elif self.type == 6:
+            self.image_horizontal_pipe_1.clip_draw(0, 0, 96, 96, self.x - start_x, self.y + 24, 96, 96)
+        elif self.type == 7:
+            self.image_horizontal_pipe_2.clip_draw(0, 0, 96, 480, self.x - start_x, self.y + 240-24, 96, 480)
 
 
 

@@ -15,12 +15,10 @@ def choose_stage(is_bonus_stage=False):
     if not is_bonus_stage:
         if game_world.world_num == 1:
             if game_world.stage_num == 1:
-                set_player_pos()
                 world_1_1()
                 # world_1_2()
-                # bonus_area_3()
+                # bonus_area_1()
             elif game_world.stage_num == 2:
-                set_player_pos(48*3, 48*10)
                 world_1_2()
         else:
             # 끝 or 오류
@@ -59,16 +57,19 @@ def load_world(load_type=0):
         if game_world.stage_num == 5:
             game_world.world_num += 1
             game_world.stage_num = 1
-
-        # set_player_pos()
         # set_player_pos(48*191, 24+48*10) # 맵의 끝 부분
+        if game_world.world_num == 1:
+            if game_world.stage_num == 1:
+                set_player_pos()
+            elif game_world.stage_num == 2:
+                set_player_pos(48 * 3, 48 * 10)
 
         choose_stage()
     elif load_type == 1:
         # 스테이지 재 시작
         # 마리오 상태 초기화 및 목숨 감소
         main_state.player.reset_without_pos()
-        # set_player_pos()
+        set_player_pos()
 
         choose_stage()
     elif load_type == 2:
@@ -83,10 +84,10 @@ def load_world(load_type=0):
         if game_world.world_num == 1:
             if game_world.stage_num == 1:
                 # blocks.append(Block(48 + 165 * 48, 48 * 2 - 24, 4))
-                set_player_pos(48 * 182, 24 + 48 * 4)
+                set_player_pos(48 * 166, 24 + 48 * 4)
             elif game_world.stage_num == 2:
                 # blocks.append(Block(48 + 115 * 48, 48 * 2 - 24, 4))
-                set_player_pos(48 * 116, 24 + 48 * 2)
+                set_player_pos(48 * 116, 24 + 48 * 4)
         choose_stage()
     pass
 
@@ -421,6 +422,8 @@ def world_1_2(start_x_=0):
             blocks.append(Block(24 + (133+i) * 48, (2+j) * 48, 3))
         blocks.append(Block(24 + 137 * 48, (2+i) * 48, 3))
 
+    blocks.append(Block(24 + 137 * 48, 0 + 6 * 48, 6, [12]))
+
     # 바닥
     for i in range(80):
         blocks.append(Block(24 + i * 48, 0, 2))
@@ -472,6 +475,12 @@ def bonus_area_1():
     for i in range(5):
         items.append(Item(24 + (i + 5) * 48, 0 + 9 * 48, 0))
 
+    for i in range(9):
+        blocks.append(Block(24 + 14 * 48, 0 + (i + 4) * 48, 0))
+        blocks.append(Block(24 + 15 * 48, 0 + (i + 4) * 48, 0))
+
+    blocks.append(Block(24 + 15 * 48, 0 + 2 * 48, 6))
+
     for i in range(16):
         blocks.append(Block(24 + i * 48, 0, 2))
         blocks.append(Block(24 + i * 48, 48, 2))
@@ -508,9 +517,14 @@ def bonus_area_2():
 
     blocks.append(Block(24 + 13 * 48, 0 + 5 * 48, 1, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
 
-
     for i in range(8):
         items.append(Item(24 + (i + 5) * 48, 0 + 6 * 48, 0))
+
+    for i in range(9):
+        blocks.append(Block(24 + 14 * 48, 0 + (i + 4) * 48, 0))
+        blocks.append(Block(24 + 15 * 48, 0 + (i + 4) * 48, 0))
+
+    blocks.append(Block(24 + 15 * 48, 0 + 2 * 48, 6))
 
     for i in range(16):
         blocks.append(Block(24 + i * 48, 0, 2))
@@ -582,6 +596,7 @@ def bonus_area_3():
     blocks.append(Block(24 + 12 * 48, 7 * 48, 0))
     blocks.append(Block(24 + 12 * 48, 8 * 48, 0))
 
+    blocks.append(Block(15 * 48, 0 + 2 * 48, 6))
 
     for i in range(16):
         blocks.append(Block(24 + i * 48, 0, 2))
