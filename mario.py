@@ -280,8 +280,14 @@ class Mario:
         self.image.append(load_image('sheet/mario_sheet_2.png'))  # 405 * 118, 16 * 6
         self.image.append(load_image('sheet/mario_sheet_3.png'))  # 405 * 118, 16 * 6
 
-        # self.Star_sound = load_music('sound/05 - Star.mp3')
-        # self.Star_sound.set_volume(game_world.Basic_bgm_volume)
+        self.Star_sound = load_music('sound/05 - Star.mp3')
+        self.Star_sound.set_volume(game_world.Basic_bgm_volume)
+        self.Power_up_sound= load_wav('sound/Power up.wav')
+        self.Power_up_sound.set_volume(game_world.Basic_bgm_volume)
+        self.Power_down_sound= load_wav('sound/Power down.wav')
+        self.Power_down_sound.set_volume(game_world.Basic_bgm_volume)
+        self.Throwing_fireball_sound= load_wav('sound/Throwing fireball.wav')
+        self.Throwing_fireball_sound.set_volume(game_world.Basic_bgm_volume)
 
         # 현재 위치
         self.x = x
@@ -373,7 +379,7 @@ class Mario:
                 self.is_invincible = True
                 game_world.remove_object(item)
                 # game_world.Basic_bgm.set_volume(0)
-                # self.Star_sound.play()
+                self.Star_sound.play()
                 # Item_star
 
     def collision_with_enemy(self, enemy, invincible_time=2):
@@ -386,11 +392,13 @@ class Mario:
 
             if self.is_invincible:
                 enemy.is_alive = False
+                enemy.monster_hit_sound.play()
             else:
                 if col_dir == 8:
                     # y_speed 보정, 적 죽이기
                     self.y_speed = Gravitational_acceleration_PPS * 0.2
                     enemy.is_alive = False
+                    enemy.monster_hit_sound.play()
                 else:
                     if self.star_count == 0: # 무적이 아니면
                         self.change_status(False)
@@ -524,11 +532,13 @@ class Mario:
         elif self.is_changing_status:
             self.status_update()
         else:
-            self.star_count -= 12 * game_framework.frame_time
+            if self.star_count >0:
+                self.star_count -= 12 * game_framework.frame_time
             if self.star_count < 0:
                 self.star_count = 0
                 # self.Star_sound.stop()
-                # game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
+                game_world.Basic_bgm.play()
+                self.is_invincible = False
 
             self.cur_state.do(self)
             if len(self.event_que) > 0:

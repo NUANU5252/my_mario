@@ -19,6 +19,7 @@ world_num = 1
 stage_num = 0
 is_underground = False
 Basic_bgm = None
+Basic_bgi = None
 
 Basic_bgm_volume = 16
 Object_volume = 32

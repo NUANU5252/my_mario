@@ -91,11 +91,8 @@ def update():
 
 def draw():
     clear_canvas()
-    # grass.draw()
-    # for enemy in enemys:
-    #     enemy.draw()
-    # for item in items:
-    #     item.draw(player.current_status) # 개선 필요
+    game_world.Basic_bgi.clip_draw(0, 0, 48, 48, 48*8, 48*6, 48*16, 48*12)
+
     for game_object in game_world.all_objects():
         try:
             if game_world.start_x - 48 < game_object.x < game_world.start_x + 48 + 800:

@@ -106,6 +106,8 @@ def world_1_1(start_x_=0):
     game_world.Basic_bgm = load_music('sound/01 - Main Theme.mp3')
     game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
     game_world.Basic_bgm.repeat_play()
+    game_world.Basic_bgi = load_image('sheet/bgi_1.png')
+
 
     # 1층 높이값 = 5, 2층 높이값 = 9
 
@@ -288,6 +290,7 @@ def world_1_2(start_x_=0):
     game_world.Basic_bgm = load_music('sound/02 - Dungeon.mp3')
     game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
     game_world.Basic_bgm.repeat_play()
+    game_world.Basic_bgi = load_image('sheet/bgi_2.png')
 
     # 1층 높이값 = 5, 2층 높이값 = 9
     # 벽
@@ -453,6 +456,7 @@ def bonus_area_1():
     game_world.Basic_bgm = load_music('sound/02 - Dungeon.mp3')
     game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
     game_world.Basic_bgm.repeat_play()
+    game_world.Basic_bgi = load_image('sheet/bgi_2.png')
 
     for i in range(11):
         blocks.append(Block(24 + 0 * 48, 0 + (i + 2) * 48, 0))
@@ -487,6 +491,7 @@ def bonus_area_2():
     game_world.Basic_bgm = load_music('sound/02 - Dungeon.mp3')
     game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
     game_world.Basic_bgm.repeat_play()
+    game_world.Basic_bgi = load_image('sheet/bgi_2.png')
 
     for i in range(11):
         blocks.append(Block(24 + 0 * 48, 0 + (i + 2) * 48, 0))
@@ -526,6 +531,7 @@ def bonus_area_3():
     game_world.Basic_bgm = load_music('sound/02 - Dungeon.mp3')
     game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
     game_world.Basic_bgm.repeat_play()
+    game_world.Basic_bgi = load_image('sheet/bgi_2.png')
 
     for i in range(11):
         blocks.append(Block(24 + 0 * 48, (i + 2) * 48, 0))

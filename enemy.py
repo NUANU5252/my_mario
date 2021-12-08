@@ -28,6 +28,7 @@ Gravitational_acceleration_PPS = Gravitational_acceleration_MPS * PIXEL_PER_METE
 class Enemy:
     image_1 = None
     image_2 = None
+    monster_hit_sound = None
 
     def __init__(self, x=random.randint(50, 750), y=90, type_=0):
         self.patrol_order = 1
@@ -36,10 +37,16 @@ class Enemy:
         self.patrol_positions.append((x + RUN_SPEED_PPS, y) )
         self.x, self.y = self.patrol_positions[0]  # 시작 위치는 0, 다음 위치는 1
         self.type = type_
+
         if Enemy.image_1 == None:
             Enemy.image_1 = load_image('sheet/enemies_sheet_1.png')
         if Enemy.image_2 == None:
             Enemy.image_2 = load_image('sheet/enemies_sheet_2.png')
+
+        if Enemy.monster_hit_sound == None:
+            Enemy.monster_hit_sound = load_wav('sound/monster_hit.wav')
+            Enemy.monster_hit_sound.set_volume(game_world.Object_volume)
+
         if self.type == 0:
             self.image = Enemy.image_1
         elif self.type == 1:

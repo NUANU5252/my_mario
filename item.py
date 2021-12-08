@@ -43,7 +43,7 @@ class Item:
             Item.Coin_sound = load_wav('sound/Coin.wav')
             Item.Coin_sound.set_volume(game_world.Object_volume)
         if Item.Appear_sound == None:
-            Item.Appear_sound = load_wav('sound/Appear.wav')
+            Item.Appear_sound = load_wav('sound/Item sprouting.wav')
             Item.Appear_sound.set_volume(game_world.Object_volume)
 
         if type == 0:
