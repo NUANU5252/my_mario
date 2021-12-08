@@ -262,12 +262,14 @@ class Mario:
         self.status_count = 0
         self.attack_count = 0
         self.attack_cool_time = 0
-
+        self.flag_count = 6
         self.current_status = 0  # 0 : 기본, 1 : 버섯, 2 : 꽃
         self.now_status = None
         self.later_status = None
 
         self.frame = 0
+
+        self.die_count = 3.5
 
         self.event_que = []
         self.cur_state = IdleState
@@ -282,12 +284,17 @@ class Mario:
 
         self.Star_sound = load_music('sound/05 - Star.mp3')
         self.Star_sound.set_volume(game_world.Basic_bgm_volume)
+        self.Die_sound = load_music('sound/08 - Die.mp3')
+        self.Die_sound.set_volume(game_world.Basic_bgm_volume)
+        self.Stage_Clear_sound = load_music('sound/06 - Stage Clear.mp3')
+        self.Stage_Clear_sound.set_volume(game_world.Basic_bgm_volume)
+
         self.Power_up_sound= load_wav('sound/Power up.wav')
-        self.Power_up_sound.set_volume(game_world.Basic_bgm_volume)
+        self.Power_up_sound.set_volume(game_world.Object_volume)
         self.Power_down_sound= load_wav('sound/Power down.wav')
-        self.Power_down_sound.set_volume(game_world.Basic_bgm_volume)
+        self.Power_down_sound.set_volume(game_world.Object_volume)
         self.Throwing_fireball_sound= load_wav('sound/Throwing fireball.wav')
-        self.Throwing_fireball_sound.set_volume(game_world.Basic_bgm_volume)
+        self.Throwing_fireball_sound.set_volume(game_world.Object_volume)
 
         # 현재 위치
         self.x = x
@@ -297,16 +304,17 @@ class Mario:
     def fire(self):
         fire = Fire(self.x, self.y, self.dir)
         game_world.add_object(fire, 4)
+        self.Throwing_fireball_sound.play()
 
     def change_status(self, is_upgrade=True):
         if not self.is_changing_status:
             self.is_changing_status = True
-
             self.now_status = self.current_status
             if is_upgrade:
                 # 점수 get
                 if self.current_status < 2:
                     self.later_status = self.current_status + 1
+                    self.Power_up_sound.play()
                 else:
                     self.is_changing_status = False
             elif not is_upgrade:
@@ -314,6 +322,7 @@ class Mario:
                     self.die()
                 elif self.current_status < 3:
                     self.later_status = self.current_status - 1
+                    self.Power_down_sound.play()
 
     def status_update(self, update_time=0.5, update_frame=12):
         if (int(self.status_count) % 2) == 0:
@@ -329,8 +338,8 @@ class Mario:
 
     def collision_with_block(self, block):
         if block.type == 5:
-            # 현재 높이와 깃발 최대 높이에서의 비율을 계산하여 점수를 준다.
-            map.load_world()
+            self.is_on_flag = True
+            self.Stage_Clear_sound.play()
             return
         left_a, bottom_a, right_a, top_a = self.get_bb()
         left_b, bottom_b, right_b, top_b = block.get_bb()
@@ -341,7 +350,7 @@ class Mario:
             if self.cur_state == JumpState:
                 if block.type != 4:
                     block.collision_event(self)
-                self.y_speed = -self.y_speed
+                self.y_speed = -self.y_speed / 2
                 self.y -= top_a - bottom_b + 1
         elif col_dir == 6:
             # self.x_speed = 0
@@ -391,14 +400,12 @@ class Mario:
             print(col_dir)
 
             if self.is_invincible:
-                enemy.is_alive = False
-                enemy.monster_hit_sound.play()
+                enemy.del_event()
             else:
                 if col_dir == 8:
                     # y_speed 보정, 적 죽이기
                     self.y_speed = Gravitational_acceleration_PPS * 0.2
-                    enemy.is_alive = False
-                    enemy.monster_hit_sound.play()
+                    enemy.del_event()
                 else:
                     if self.star_count == 0: # 무적이 아니면
                         self.change_status(False)
@@ -451,9 +458,9 @@ class Mario:
     def acceleration_update(self, is_jump_state=False):
         x_acceleration = 0
         new_acceleration = RUN_ACCELERATION_PPS * game_framework.frame_time
-        if self.is_right_key_down:
+        if self.is_right_key_down and self.cur_state != SitState:
             x_acceleration += new_acceleration
-        if self.is_left_key_down:
+        if self.is_left_key_down and self.cur_state != SitState:
             x_acceleration += -new_acceleration
         self.x_acceleration = x_acceleration
 
@@ -519,16 +526,23 @@ class Mario:
         self.is_alive = False
         self.x_speed = 0
         self.x_acceleration = 0
-        self.y_speed = Gravitational_acceleration_PPS * 0.35
+        self.y_speed = Gravitational_acceleration_PPS * 0.5
         self.y_acceleration = -Gravitational_acceleration_PPS
         self.is_jumping = False
+        self.Die_sound.play()
 
     def update(self):
         if self.y < 0 and self.is_alive:
             self.die()
-        if not self.is_alive:
+        if self.is_on_flag:
+            self.flag_count -= game_framework.frame_time
+            if self.flag_count < 0:
+                map.load_world()
+                self.is_on_flag = False
+        elif not self.is_alive:
             self.y_speed += self.y_acceleration * game_framework.frame_time
             self.y += self.y_speed * game_framework.frame_time
+            self.die_count -= game_framework.frame_time
         elif self.is_changing_status:
             self.status_update()
         else:

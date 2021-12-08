@@ -61,6 +61,10 @@ class Enemy:
         self.frame = 0
         self.build_behavior_tree()
 
+    def del_event(self):
+        self.is_alive = False
+        self.monster_hit_sound.play()
+
     def build_behavior_tree(self):
         pass
 

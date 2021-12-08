@@ -82,7 +82,7 @@ class Fire:
 
     def collision_with_enemy(self, enemy):
         if enemy.is_alive:
-            enemy.is_alive = False
+            enemy.del_event()
             self.del_self()
 
     def crash_check(self):

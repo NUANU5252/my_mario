@@ -28,8 +28,6 @@ def enter():
 
     player = mario.Mario()
     map.load_world()
-    # map.world_1_1(800)
-#     플레이어 포함 보류
 
 
 def exit():
@@ -78,7 +76,7 @@ def update():
             print('game_object: ', game_object.__name__)
 
     if not player.is_alive:
-        if player.y < 0:
+        if player.die_count < 0:
             map.load_world(1)
             pass
 
