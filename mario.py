@@ -69,8 +69,8 @@ class IdleState:
 
     def do(mario):
         mario.acceleration_update()
-        # mario.y_acceleration_update()
-        # mario.y_speed_update()
+        mario.y_acceleration_update()
+        mario.y_speed_update()
 
         mario.speed_update()
         mario.dir_update()
@@ -273,6 +273,43 @@ class Mario:
         self.die_count = 3.5
 
         self.event_que = []
+        self.cur_state = IdleState
+        self.cur_state.enter(self, None)
+
+    def reset_speeds(self):
+        # 현재 위치 는 밖에서
+        # 현재 속도
+        self.x_speed = 0
+        self.y_speed = 0
+        # 현재 가속도
+        self.x_acceleration = 0
+        self.y_acceleration = 0
+        # 방향
+        self.dir = 0  # 1 왼쪽, 0 오른쪽
+        # 부울변수
+        self.is_jumping = False
+        self.is_sit_down = False
+        self.is_alive = True
+        self.is_attacking = False
+        self.is_changing_status = False
+        self.is_on_flag = False
+        self.is_on_block = False
+        # self.is_turning = False # 보류 == x_speed * x_acceleration < 0
+
+        self.is_right_key_down = False
+        self.is_left_key_down = False
+        self.is_up_key_down = False  # 점프
+        self.is_invincible = False
+        self.jump_count = 0  # 점프했을때 y_speed가 더해질 수 있는 횟수
+
+        self.star_count = 0  # 1이상이면 무적
+        self.status_count = 0
+        self.attack_count = 0
+        self.attack_cool_time = 0
+        self.flag_count = 6
+
+        self.die_count = 3.5
+
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
 

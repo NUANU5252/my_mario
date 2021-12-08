@@ -45,7 +45,7 @@ def load_world(load_type=0):
     # blocks, enenmys, items 삭제 이건 더른곳에서 하고잇음
     # game_world 삭제
     game_world.clear()
-
+    main_state.player.reset_speeds()
     # game_world 의 해당하는 스테이지를 불러운다.
     # 클리어 할 경우 stage 를 올리고 부른다.
     # 보너스로 가는 경우
