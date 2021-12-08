@@ -17,13 +17,13 @@ def choose_stage(is_bonus_stage=False):
         if game_world.world_num == 1:
             if game_world.stage_num == 1:
                 world_1_1()
+                # test_area()
                 # world_1_2()
                 # bonus_area_1()
             elif game_world.stage_num == 2:
                 world_1_2()
         else:
-            # 끝 or 오류
-            pass
+            test_area()
     else:
         if game_world.world_num == 1:
             if game_world.stage_num == 1:
@@ -31,8 +31,7 @@ def choose_stage(is_bonus_stage=False):
             elif game_world.stage_num == 2:
                 bonus_area_2()
         else:
-            # 끝 or 오류
-            pass
+            test_area()
 
 
 def set_player_pos(x=48*3, y=48*2+24, start_x_=0):
@@ -629,6 +628,45 @@ def bonus_area_3():
     for i in range(16):
         blocks.append(Block(24 + i * 48, 0, 2))
         blocks.append(Block(24 + i * 48, 48, 2))
+
+    game_world.add_objects(enemys, 1)
+    game_world.add_objects(items, 2)
+    game_world.add_objects(blocks, 3)
+
+
+def test_area():
+    global enemys, items, blocks
+    blocks = []
+    enemys = []
+    items = []
+    game_world.max_start_x = 48 * 0
+    game_world.is_underground = True
+    game_world.Basic_bgm = load_music('sound/02 - Dungeon.mp3')
+    game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
+    game_world.Basic_bgm.repeat_play()
+    game_world.Basic_bgi = load_image('sheet/bgi_2.png')
+
+    for i in range(11):
+        blocks.append(Block(24 + 0 * 48, (i + 2) * 48, 0))
+        blocks.append(Block(24 + 15 * 48, (i + 2) * 48, 0))
+
+    for i in range(4):
+        blocks.append(Block(24 + 7 * 48, (i + 2) * 48, 0))
+
+    blocks.append(Block(24 + 4 * 48, 5 * 48, 0, [0, 0, 0, 0, 1, 1]))
+    blocks.append(Block(24 + 5 * 48, 5 * 48, 1, [0, 1, 1, 2]))
+
+
+    for i in range(16):
+        blocks.append(Block(24 + i * 48, 0, 2))
+        blocks.append(Block(24 + i * 48, 48, 2))
+
+    enemys.append(Enemy(24 + 9 * 48, 48 * 2, 0))
+    enemys.append(Enemy(24 + 10 * 48, 48 * 2, 0))
+    enemys.append(Enemy(24 + 11 * 48, 48 * 2, 0))
+    enemys.append(Enemy(24 + 12 * 48, 48 * 2, 1))
+    enemys.append(Enemy(24 + 13 * 48, 48 * 2, 1))
+    enemys.append(Enemy(24 + 14 * 48, 48 * 2, 1))
 
     game_world.add_objects(enemys, 1)
     game_world.add_objects(items, 2)

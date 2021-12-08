@@ -86,7 +86,7 @@ class Item:
         if self.type == 0:
             return self.x - 12 - start_x, self.y - 28, self.x + 12 - start_x, self.y + 24
         else:
-            return self.x - 24 - start_x, self.y - 24, self.x + 24 - start_x, self.y + 24
+            return self.x - 22 - start_x, self.y - 24, self.x + 21 - start_x, self.y + 24
 
     def update_by_type(self):
         if self.type == 1:
