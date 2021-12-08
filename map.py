@@ -442,7 +442,32 @@ def world_1_2(start_x_=0):
         blocks.append(Block(24 + (i + 126) * 48, 48, 2))
 
     # 적
+    enemys.append(Enemy(24 + 13 * 48, 48 * 2, 0))
+    enemys.append(Enemy(24 + 14 * 48, 48 * 2, 0))
 
+    enemys.append(Enemy(24 + 29 * 48, 48 * 2, 0))
+
+    enemys.append(Enemy(24 + 41 * 48, 48 * 2, 1))
+    enemys.append(Enemy(24 + 43 * 48, 48 * 2, 1))
+
+    enemys.append(Enemy(24 + 53 * 48, 48 * 2, 1))
+
+    enemys.append(Enemy(24 + 60 * 48, 48 * 2, 0))
+    enemys.append(Enemy(24 + 62 * 48, 48 * 2, 0))
+
+    enemys.append(Enemy(24 + 73 * 48, 48 * 10, 0))
+
+    enemys.append(Enemy(24 + 78 * 48, 48 * 6, 0))
+    enemys.append(Enemy(24 + 79 * 48, 48 * 6, 0))
+
+    enemys.append(Enemy(24 + 98 * 48, 48 * 2, 0))
+    enemys.append(Enemy(24 + 99 * 48, 48 * 2, 0))
+    enemys.append(Enemy(24 + 100 * 48, 48 * 2, 0))
+
+    enemys.append(Enemy(24 + 113 * 48, 48 * 2, 0))
+
+    enemys.append(Enemy(24 + 135 * 48, 48 * 5, 0))
+    enemys.append(Enemy(24 + 1369 * 48, 48 * 6, 0))
 
     game_world.add_objects(enemys, 1)
     game_world.add_objects(items, 2)

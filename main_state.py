@@ -68,7 +68,7 @@ def update():
     for game_object in game_world.all_objects():
         # game_object.update()
         try:
-            if game_world.start_x - 48*10 < game_object.x < game_world.start_x + 48*10 + 800:
+            if game_world.start_x - 48*game_world.Update_range < game_object.x < game_world.start_x + 48*game_world.Update_range + 800:
                 game_object.update()
             elif game_world.start_x - 48*10 > game_object.x:
                 game_world.remove_object(game_object)

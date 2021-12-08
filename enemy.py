@@ -28,6 +28,8 @@ Gravitational_acceleration_PPS = Gravitational_acceleration_MPS * PIXEL_PER_METE
 class Enemy:
     image_1 = None
     image_2 = None
+    image_1_ug = None
+    image_2_ug = None
     monster_hit_sound = None
 
     def __init__(self, x=random.randint(50, 750), y=90, type_=0):
@@ -42,6 +44,10 @@ class Enemy:
             Enemy.image_1 = load_image('sheet/enemies_sheet_1.png')
         if Enemy.image_2 == None:
             Enemy.image_2 = load_image('sheet/enemies_sheet_2.png')
+        if Enemy.image_1_ug == None:
+            Enemy.image_1_ug = load_image('sheet/enemies_sheet_1_ug.png')
+        if Enemy.image_2_ug == None:
+            Enemy.image_2_ug = load_image('sheet/enemies_sheet_2_ug.png')
 
         if Enemy.monster_hit_sound == None:
             Enemy.monster_hit_sound = load_wav('sound/monster_hit.wav')
@@ -49,12 +55,14 @@ class Enemy:
 
         if self.type == 0:
             self.image = Enemy.image_1
+            self.image_ug = Enemy.image_1_ug
         elif self.type == 1:
             self.image = Enemy.image_2
+            self.image_ug = Enemy.image_2_ug
         # 현재 속도
         self.x_speed = RUN_SPEED_PPS / 2
         self.y_speed = 0
-        self.dir = 0 # 우, 좌
+        self.dir = 1 # 우, 좌
         self.dir_count = 2
         self.is_alive = True
         self.dead_count = 0
@@ -139,7 +147,13 @@ class Enemy:
             self.del_self()
 
     def draw(self, start_x=0):
-        if not self.is_alive: # 사망
-            self.image.clip_draw(16 * 4, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
+        if game_world.is_underground:
+            if not self.is_alive:  # 사망
+                self.image_ug.clip_draw(16 * 4, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
+            else:
+                self.image_ug.clip_draw(int(self.frame) * 16, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
         else:
-            self.image.clip_draw(int(self.frame) * 16, self.dir*32, 16, 32, self.x - start_x, self.y, 48, 96)
+            if not self.is_alive: # 사망
+                self.image.clip_draw(16 * 4, self.dir * 32, 16, 32, self.x - start_x, self.y, 48, 96)
+            else:
+                self.image.clip_draw(int(self.frame) * 16, self.dir*32, 16, 32, self.x - start_x, self.y, 48, 96)

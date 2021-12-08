@@ -24,6 +24,9 @@ Basic_bgi = None
 Basic_bgm_volume = 16
 Object_volume = 32
 
+Update_range = 3
+
+
 
 def add_object(o, layer): # 게임 월드에 객체 추가
     objects[layer].append(o)
