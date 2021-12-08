@@ -4,6 +4,7 @@ from item import *
 from block import *
 # from mario_ob import *
 import game_world
+import mario
 import main_state
 
 enemys = None
@@ -63,6 +64,7 @@ def load_world(load_type=0):
                 set_player_pos()
             elif game_world.stage_num == 2:
                 set_player_pos(48 * 3, 48 * 10)
+                main_state.player.cur_state = mario.JumpState
 
         choose_stage()
     elif load_type == 1:
@@ -75,6 +77,7 @@ def load_world(load_type=0):
     elif load_type == 2:
         # 해당 스테이지의 보너스방을 부른다. 위에서 떨어진다.
         set_player_pos(48*3, 48*10) # y 값은 테스트 해볼걸
+        main_state.player.cur_state = mario.JumpState
 
         choose_stage(True)
     elif load_type == 3:

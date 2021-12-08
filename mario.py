@@ -69,8 +69,8 @@ class IdleState:
 
     def do(mario):
         mario.acceleration_update()
-        mario.y_acceleration_update()
-        mario.y_speed_update()
+        # mario.y_acceleration_update()
+        # mario.y_speed_update()
 
         mario.speed_update()
         mario.dir_update()
