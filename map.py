@@ -422,7 +422,7 @@ def world_1_2(start_x_=0):
             blocks.append(Block(24 + (133+i) * 48, (2+j) * 48, 3))
         blocks.append(Block(24 + 137 * 48, (2+i) * 48, 3))
 
-    blocks.append(Block(24 + 137 * 48, 0 + 6 * 48, 6, [12]))
+    blocks.append(Block(24 + 138 * 48, 0 + 6 * 48, 6, [12]))
 
     # 바닥
     for i in range(80):
