@@ -255,6 +255,7 @@ class Mario:
         self.is_right_key_down = False
         self.is_left_key_down = False
         self.is_up_key_down = False  # 점프
+        self.is_invincible = False
         self.jump_count = 0  # 점프했을때 y_speed가 더해질 수 있는 횟수
 
         self.star_count = 0  # 1이상이면 무적
@@ -279,6 +280,8 @@ class Mario:
         self.image.append(load_image('sheet/mario_sheet_2.png'))  # 405 * 118, 16 * 6
         self.image.append(load_image('sheet/mario_sheet_3.png'))  # 405 * 118, 16 * 6
 
+        # self.Star_sound = load_music('sound/05 - Star.mp3')
+        # self.Star_sound.set_volume(game_world.Basic_bgm_volume)
 
         # 현재 위치
         self.x = x
@@ -332,7 +335,7 @@ class Mario:
             if self.cur_state == JumpState:
                 if block.type != 4:
                     block.collision_event(self)
-                self.y_speed = 0
+                self.y_speed = -self.y_speed
                 self.y -= top_a - bottom_b + 1
         elif col_dir == 6:
             # self.x_speed = 0
@@ -367,7 +370,10 @@ class Mario:
                 # Item_power
             elif item.type == 2:
                 self.star_count = 5 * 12
+                self.is_invincible = True
                 game_world.remove_object(item)
+                # game_world.Basic_bgm.set_volume(0)
+                # self.Star_sound.play()
                 # Item_star
 
     def collision_with_enemy(self, enemy, invincible_time=2):
@@ -377,14 +383,18 @@ class Mario:
         if enemy.is_alive:
             col_dir = collide_direction(self, enemy)
             print(col_dir)
-            if col_dir == 8:
-                # y_speed 보정, 적 죽이기
-                self.y_speed = Gravitational_acceleration_PPS * 0.2
+
+            if self.is_invincible:
                 enemy.is_alive = False
             else:
-                if self.star_count == 0: # 무적이 아니면
-                    self.change_status(False)
-                    self.star_count = invincible_time * 12
+                if col_dir == 8:
+                    # y_speed 보정, 적 죽이기
+                    self.y_speed = Gravitational_acceleration_PPS * 0.2
+                    enemy.is_alive = False
+                else:
+                    if self.star_count == 0: # 무적이 아니면
+                        self.change_status(False)
+                        self.star_count = invincible_time * 12
 
     def crash_check(self):
         self.is_on_block = False
@@ -448,6 +458,7 @@ class Mario:
     def speed_update(self, slip_coefficient=1.0):
         # 속도 설정
         # 감속
+        # if self.x_acceleration == 0:
         if self.x_acceleration == 0 and self.cur_state != JumpState:
             new_acceleration = (RUN_ACCELERATION_PPS * game_framework.frame_time)/ TIME_TAKES_TO_DECELERATION
 
@@ -459,6 +470,7 @@ class Mario:
                 self.x_speed = 0
         # 가속
         if (self.x_speed <= RUN_SPEED_PPS) and (self.x_speed >= -RUN_SPEED_PPS) and self.cur_state != JumpState:
+        # if (self.x_speed <= RUN_SPEED_PPS) and (self.x_speed >= -RUN_SPEED_PPS):
             if self.x_speed * self.x_acceleration < 0:
                 self.x_speed += self.x_acceleration * slip_coefficient
             else:
@@ -515,6 +527,8 @@ class Mario:
             self.star_count -= 12 * game_framework.frame_time
             if self.star_count < 0:
                 self.star_count = 0
+                # self.Star_sound.stop()
+                # game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
 
             self.cur_state.do(self)
             if len(self.event_que) > 0:

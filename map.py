@@ -103,6 +103,9 @@ def world_1_1(start_x_=0):
     items = []
     game_world.max_start_x = 48 * 185
     game_world.is_underground = False
+    game_world.Basic_bgm = load_music('sound/01 - Main Theme.mp3')
+    game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
+    game_world.Basic_bgm.repeat_play()
 
     # 1층 높이값 = 5, 2층 높이값 = 9
 
@@ -282,6 +285,9 @@ def world_1_2(start_x_=0):
     # 맵 크기 - 15 * 48
     game_world.max_start_x = 48 * (137-15)
     game_world.is_underground = True
+    game_world.Basic_bgm = load_music('sound/02 - Dungeon.mp3')
+    game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
+    game_world.Basic_bgm.repeat_play()
 
     # 1층 높이값 = 5, 2층 높이값 = 9
     # 벽
@@ -444,6 +450,9 @@ def bonus_area_1():
     items = []
     game_world.max_start_x = 48 * 0
     game_world.is_underground = True
+    game_world.Basic_bgm = load_music('sound/02 - Dungeon.mp3')
+    game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
+    game_world.Basic_bgm.repeat_play()
 
     for i in range(11):
         blocks.append(Block(24 + 0 * 48, 0 + (i + 2) * 48, 0))
@@ -475,6 +484,9 @@ def bonus_area_2():
     items = []
     game_world.max_start_x = 48 * 0
     game_world.is_underground = True
+    game_world.Basic_bgm = load_music('sound/02 - Dungeon.mp3')
+    game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
+    game_world.Basic_bgm.repeat_play()
 
     for i in range(11):
         blocks.append(Block(24 + 0 * 48, 0 + (i + 2) * 48, 0))
@@ -511,6 +523,9 @@ def bonus_area_3():
     items = []
     game_world.max_start_x = 48 * 0
     game_world.is_underground = True
+    game_world.Basic_bgm = load_music('sound/02 - Dungeon.mp3')
+    game_world.Basic_bgm.set_volume(game_world.Basic_bgm_volume)
+    game_world.Basic_bgm.repeat_play()
 
     for i in range(11):
         blocks.append(Block(24 + 0 * 48, (i + 2) * 48, 0))

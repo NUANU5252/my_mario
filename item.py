@@ -25,9 +25,12 @@ class Item:
     image_coin = None
     image_power = None
     image_star = None
+    Coin_sound = None
+    Appear_sound = None
 
     def __init__(self, x=random.randint(50, 750), y=random.randint(140, 550), type=0):
         self.type = type
+        # 이미지
         if Item.image_coin == None:
             Item.image_coin = load_image('sheet/items_sheet_coin.png')
         if Item.image_power == None:
@@ -35,7 +38,13 @@ class Item:
         if Item.image_star == None:
             Item.image_star = load_image('sheet/items_sheet_star.png')
 
-        # 이미지
+        # 사운드
+        if Item.Coin_sound == None:
+            Item.Coin_sound = load_wav('sound/Coin.wav')
+            Item.Coin_sound.set_volume(game_world.Object_volume)
+        if Item.Appear_sound == None:
+            Item.Appear_sound = load_wav('sound/Appear.wav')
+            Item.Appear_sound.set_volume(game_world.Object_volume)
 
         if type == 0:
             self.image = Item.image_coin
@@ -43,9 +52,11 @@ class Item:
         elif type == 1:
             self.image = Item.image_power
             self.is_ready = False  # 아이템 소환이 끝나면 그때부터 상호작용이 가능하다.
+            Item.Appear_sound.play()
         elif type == 2:
             self.is_ready = False  # 아이템 소환이 끝나면 그때부터 상호작용이 가능하다.
             self.image = Item.image_star
+            Item.Appear_sound.play()
 
         self.x = x
         self.y = y
@@ -67,6 +78,8 @@ class Item:
             self.power_type = 0
 
     def del_self(self):
+        if self.type == 0:
+            Item.Coin_sound.play()
         game_world.remove_object(self)
 
     def get_bb(self, start_x=0):

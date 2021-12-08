@@ -18,6 +18,11 @@ max_start_x = 48 * 185
 world_num = 1
 stage_num = 0
 is_underground = False
+Basic_bgm = None
+
+Basic_bgm_volume = 16
+Object_volume = 32
+
 
 def add_object(o, layer): # 게임 월드에 객체 추가
     objects[layer].append(o)
